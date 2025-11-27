@@ -40,6 +40,14 @@ h1 {
     margin: 0 0 20px 0;
     line-height: 1.2;
 }
+/* Overskrift h2 */
+h2 {
+    font-family: "Segoe UI", "Segoe UI Light", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    font-size: 26px;        /* 32 px */
+    font-weight: 420;       /* Fed skrift */
+    margin: 0 0 20px 0;
+    line-height: 1.2;
+}
 
 /* Knapper som tekst-links */
 .text-button {
