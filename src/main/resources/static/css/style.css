@@ -81,3 +81,14 @@ section {
 html {
     scroll-behavior: smooth;
 }
+.service-box {
+    background-color: #f1f1f1;  /* lys grå baggrund */
+    border-radius: 12px;        /* bløde kanter */
+    padding: 20px;              /* indvendig afstand */
+    margin-bottom: 20px;        /* afstand mellem bokse */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05); /* let skygge for dybde */
+}
+
+.service-box h2 {
+    margin-top: 0;              /* fjern top-margin på overskrift */
+}
