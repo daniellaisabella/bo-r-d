@@ -1,0 +1,31 @@
+/* static/css/image.css */
+
+img {
+    max-width: 100%;    /* Sørger for at billedet aldrig bliver bredere end containeren */
+    width: 50%;         /* Kan justeres, fx 70%, 60% afhængigt af ønsket størrelse */
+    display: block;     /* Fjerner evt. inline spacing under billedet */
+    margin-top: 40px;
+    margin-left: 0;
+    height: auto;       /* Bevarer billedets proportioner */
+}
+.image-container {
+    display: flex;           /* Flexbox for billede + boks */
+    align-items: flex-start; /* Top-justering */
+    gap: 20px;               /* Luft mellem billede og boks */
+    margin-left: 0;
+    margin-bottom: 20px;     /* Luft under containeren */
+}
+
+.image-container img {
+    width: 60%;              /* Billedets bredde, kan justeres */
+    max-width: 100%;         /* Sikrer at det ikke overskrider containeren */
+    height: auto;
+}
+
+.side-box {
+    width: 35%;              /* Boksens bredde */
+
+    padding: 15px;
+    border-radius: 8px;
+
+}

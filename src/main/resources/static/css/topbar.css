@@ -1,0 +1,75 @@
+/* Topbar container */
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0px;
+    background-color: #fff;          /* hvid baggrund */
+    border-bottom: 1px solid #ddd;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+
+/* Logo / firmanavn */
+.logo a {
+    font-family: "Segoe UI Light", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    font-size: 32px;
+    font-weight: 700;   /* fed skrift */
+    color: #222;        /* sort tekst */
+    text-decoration: none;
+}
+
+/* Navigation menu */
+.nav-menu {
+    display: flex;
+    gap: 30px;
+}
+
+/* Navigation links */
+.nav-link {
+    font-family: "Segoe UI Light", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 700;   /* fed skrift */
+    color: #222;        /* sort tekst */
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Understregning ved hover */
+.nav-link:hover {
+    text-decoration: underline;
+    color: #222;        /* behold sort ved hover */
+}
+/* Hvis topbaren er fx 80px høj */
+section {
+    scroll-margin-top: 80px; /* samme højde som topbar */
+}
+
+/* Footer baggrund fylder hele bredden */
+.site-footer {
+    background-color: #f9f9f9; /* grå baggrund til kanten */
+    width: 100%;
+    padding: 30px 0;
+    box-sizing: border-box;
+}
+
+/* Footer-indhold flugter med resten af siden */
+.footer-content {
+    max-width: 1200px;      /* samme som .page-container */
+    margin: 0 auto;         /* centrerer indholdet */
+    padding: 0 20px;        /* samme padding som .page-container */
+    box-sizing: border-box;
+}
+
+/* Separatorlinje flugter med indhold */
+.footer-separator {
+    max-width: 1200px;      /* samme som indhold */
+    margin: 0 auto 20px auto;
+    border: none;
+    border-top: 1px solid #ccc;
+}
+#om {
+    scroll-margin-top: 120px; /* sæt til topbarens samlede højde */
+}

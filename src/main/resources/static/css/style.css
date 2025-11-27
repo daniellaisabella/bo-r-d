@@ -1,0 +1,75 @@
+/* Global standardfont og tekststørrelse */
+body {
+    font-family: "Segoe UI", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;        /* brødtekst */
+    font-weight: 220;       /* light */
+    color: #222;
+    margin: 0;
+    line-height: 1.9;
+    background-color: #fff;
+    padding: 0;             /* body padding fjernet */
+    box-sizing: border-box;
+
+}
+html, body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* Wrapper / container for hele siden */
+.page-container {
+    max-width: 1200px;      /* Maksimal bredde */
+    margin: 0 auto;         /* Centrerer indhold */
+    padding: 0 20px;        /* Indvendig margin til sider */
+    box-sizing: border-box;
+}
+
+/* Luft mellem topbar og indhold, samt indhold og footer */
+.page-container main {
+    margin-top: 40px;       /* afstand under topbar */
+    margin-bottom: 40px;    /* afstand over footer */
+}
+
+/* Overskrift h1 */
+h1 {
+    font-family: "Segoe UI", "Segoe UI Light", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    font-size: 32px;        /* 32 px */
+    font-weight: 420;       /* Fed skrift */
+    margin: 0 0 20px 0;
+    line-height: 1.2;
+}
+
+/* Knapper som tekst-links */
+.text-button {
+    font-size: 16px;
+    font-weight: 700;
+    text-decoration: none;
+    color: #222;
+    cursor: pointer;
+    margin-right: 20px;
+}
+
+/* Understregning ved hover */
+.text-button:hover {
+    text-decoration: underline;
+}
+
+/* Container for knapper på samme linje */
+.button-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+
+/* Scroll-margin til sektioner for sticky topbar */
+section {
+    scroll-margin-top: 90px; /* tilpasset topbar højde */
+}
+
+/* Smooth scroll */
+html {
+    scroll-behavior: smooth;
+}
