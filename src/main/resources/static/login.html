@@ -19,7 +19,7 @@
         <nav class="nav-menu">
             <a href="products.html" class="nav-link">Boligrådgivning</a>
             <a href="#kontakt" class="nav-link">Kontakt</a>
-            <a href="#om" class="nav-link">Om Bo & Råd</a>
+            <a href="index.html#om" class="nav-link">Om Bo & Råd</a>
             <a href="login.html" class="nav-link">Log ind</a>
         </nav>
     </div>
@@ -28,14 +28,53 @@
 <div class="page-container">
 
 
-
-
-
     <main>
         <h1>Log ind eller opret kundeprofil <i>helt gratis!</i></h1>
 
-        <h1> <i>HER SKAL LOGIN FORM VÆRE </i> </h1>
+        <div id="formDiv">
+            <form id="loginForm">
+                <label for="email">E-mail </label>
+                <input type="email" id="email" name="email" required>
+                <br><br>
 
+                <label for="password">Adgangskode </label>
+                <input type="password" id="password" name="password" required>
+                <br><br>
+
+                <button class="btn1" type="submit">Log ind</button>
+            </form>
+
+            <form id="registerForm" style="display:none;">
+                <label for="newEmail">E-mail </label>
+                <input type="email" id="newEmail" name="email" required>
+                <br><br>
+
+                <label for="newPassword">Adgangskode </label>
+                <input type="password" id="newPassword" name="password" required>
+                <br><br>
+                <label for="name">Navn </label>
+                <input type="text" id="name" name="name" required>
+                <br><br>
+
+                <label for="phoneNumber">Telefonnummer </label>
+                <input type="number" id="phoneNumber" name="phoneNumber" required>
+                <br>
+                <br>
+                <button class="btn1" type="submit">Opret</button>
+                <br>
+                <br>
+               <p>eller </p>
+                <a href="login.html"> <button class="btn1" type="button"> Log ind </button> </a>
+
+            </form>
+
+            <p id="message"></p>
+
+
+            <p id="or"> eller </p>
+            <button id="openRegister" type="button" class="btn1" >opret profil</button>
+
+        </div>
     </main>
 
 
@@ -46,13 +85,13 @@
             <p>Som kunde hos mig får du adgang til din egen sikre kundeprofil,
                 hvor alle dokumenter, aftaler og rådgivningsforløb er samlet ét sted.
                 Her kan du nemt booke møder, følge processen og finde alt relevant materiale, når du har brug for det.
-                Det giver dig et trygt, overskueligt og transparent forløb – fra første kontakt til afsluttet opgave.</p>
+                Det giver dig et trygt, overskueligt og transparent forløb – fra første kontakt til afsluttet
+                opgave.</p>
         </div>
     </div>
 </div>
 
 <footer class="site-footer">
-
 
 
     <!-- Begrænset indhold -->
@@ -72,6 +111,6 @@
 </footer>
 
 
-
+<script type="module" src="js/login.js"></script>
 </body>
 </html>
