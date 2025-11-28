@@ -1,38 +1,52 @@
-/* Topbar container */
+
+
+/* Topbar baggrund fylder hele bredden */
 .topbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 0px;
-    background-color: #fff;          /* hvid baggrund */
-    border-bottom: 1px solid #ddd;
+    background-color:#e7f0ea;  /* mørkere grøn */
+    width: 100%;               /* fylder hele bredden */
     position: sticky;
     top: 0;
     z-index: 1000;
+    border-bottom: 1px solid #e7f0ea;
 }
 
+/* Indholdet i topbar flugter med resten */
+.topbar .topbar-content {
+    max-width: 1200px;         /* samme som .page-container */
+    margin: 0 auto;            /* centrerer indholdet */
+    padding: 0 20px;           /* samme padding som sideindhold */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;              /* kan justeres efter behov */
+}
 
 /* Logo / firmanavn */
 .logo a {
-    font-family: "Segoe UI Light", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
-    font-size: 32px;
-    font-weight: 700;   /* fed skrift */
-    color: #222;        /* sort tekst */
+    font-family: "Segoe UI", "Segoe UI Light", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    font-size: 32px;        /* 32 px */
+    font-weight: 420;       /* Fed skrift */
+    margin: 0 0 0 0;
+    line-height: 1.2;
+    color: inherit;
     text-decoration: none;
+
 }
 
 /* Navigation menu */
 .nav-menu {
     display: flex;
-    gap: 30px;
+    gap: 40px;
 }
 
 /* Navigation links */
 .nav-link {
-    font-family: "Segoe UI Light", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
-    font-size: 16px;
-    font-weight: 700;   /* fed skrift */
-    color: #222;        /* sort tekst */
+    font-family: "Segoe UI", "Segoe UI Light", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;        /* 32 px */
+    font-weight: 420;       /* Fed skrift */
+    margin: 0 0 0 0;
+    line-height: 1.2;
+    color: inherit;
     text-decoration: none;
     cursor: pointer;
 }
@@ -40,7 +54,7 @@
 /* Understregning ved hover */
 .nav-link:hover {
     text-decoration: underline;
-    color: #222;        /* behold sort ved hover */
+    color: #1A1A1A;        /* behold sort ved hover */
 }
 /* Hvis topbaren er fx 80px høj */
 section {
@@ -49,7 +63,7 @@ section {
 
 /* Footer baggrund fylder hele bredden */
 .site-footer {
-    background-color: #f9f9f9; /* grå baggrund til kanten */
+    background-color: #e7f0ea; /* grå baggrund til kanten */
     width: 100%;
     padding: 30px 0;
     box-sizing: border-box;

@@ -3,7 +3,7 @@ body {
     font-family: "Segoe UI", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
     font-size: 16px;        /* brødtekst */
     font-weight: 220;       /* light */
-    color: #222;
+    color:#1A1A1A;
     margin: 0;
     line-height: 1.9;
     background-color: #fff;
@@ -52,7 +52,7 @@ h2 {
 /* Knapper som tekst-links */
 .text-button {
     font-size: 16px;
-    font-weight: 700;
+    font-weight: 500;
     text-decoration: none;
     color: #222;
     cursor: pointer;
@@ -82,7 +82,7 @@ html {
     scroll-behavior: smooth;
 }
 .service-box {
-    background-color: #f1f1f1;  /* lys grå baggrund */
+    background-color: #dff3e1;  /* lys grå/grøn baggrund */
     border-radius: 12px;        /* bløde kanter */
     padding: 20px;              /* indvendig afstand */
     margin-bottom: 20px;        /* afstand mellem bokse */
