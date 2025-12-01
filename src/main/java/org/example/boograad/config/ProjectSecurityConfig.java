@@ -21,8 +21,9 @@ public class ProjectSecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/index.html", "/products.html", "/login.html","/css/**", "/js/**", "/images/**","/register-customer", "/login").permitAll()
-                        .requestMatchers("/myAccount", "/myBalance").authenticated()
+                        .requestMatchers("/", "/index.html", "/products.html", "/login.html","/css/**", "/js/**",
+                                "/images/**","/register-customer", "/login", "/session", "/favicon.ico").permitAll()
+                        .requestMatchers("/myProfile.html", "/myBalance").authenticated()
                 )
                 .formLogin(form -> form.disable())
                 .httpBasic(httpBasic -> httpBasic.disable());

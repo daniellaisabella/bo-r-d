@@ -50,7 +50,7 @@ function fetchAnyUrl(path) {
 }
 
 async function fetchSession() {
-    const urlSession = "https://kinoxpback-h7arcge9c2ahdxfu.uksouth-01.azurewebsites.net/api/auth/session";
+    const urlSession = baseurl + "session";
     try {
         const response = await fetch(urlSession, {
             method: "GET",

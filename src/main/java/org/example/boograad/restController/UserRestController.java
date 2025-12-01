@@ -6,12 +6,15 @@ import org.example.boograad.model.User;
 import org.example.boograad.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -65,6 +68,19 @@ public class UserRestController {
             session.setAttribute("name", user.getName());
             session.setAttribute("role", user.getRole().toString());
 
+
+            // Opret Authentication-objekt med roller
+            List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(user.getRole().toString()));
+            Authentication auth = new UsernamePasswordAuthenticationToken(
+                    user.getEmail(),
+                    null,
+                    authorities
+            );
+
+            // Sæt Authentication i SecurityContext
+            SecurityContextHolder.getContext().setAuthentication(auth);
+            session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
+
             Map<String, Object> response = new HashMap<>();
             response.put("id", user.getUserId());
             response.put("email", user.getEmail());
@@ -75,5 +91,31 @@ public class UserRestController {
         } catch (Exception e) {
             return ResponseEntity.status(401).body("Login failed");
         }
+    }
+
+    @GetMapping("/session")
+    public ResponseEntity<?> checkSession(HttpSession session) {
+        Integer userId = (Integer) session.getAttribute("userId");
+
+        if (userId == null) {
+            return ResponseEntity.status(401).body("Not logged in");
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("id", userId);
+        response.put("name", session.getAttribute("name"));
+        response.put("role", session.getAttribute("role"));
+        response.put("email", session.getAttribute("email"));
+
+        return ResponseEntity.ok(response);
+
+    }
+
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpSession session) {
+        SecurityContextHolder.clearContext();
+        session.invalidate();
+        return ResponseEntity.ok("Logged out successfully");
     }
 }
