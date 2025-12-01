@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bo & Råd</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/topbar.css">
+    <link rel="stylesheet" href="css/imageindex.css">
+</head>
+<body>
+<header class="topbar">
+    <div class="topbar-content">
+        <!-- Logo / firmanavn -->
+        <div class="logo">
+            <a href="index.html">Bo & Råd</a>
+        </div>
+
+        <!-- Navigation menu -->
+        <nav class="nav-menu">
+            <a href="products.html" class="nav-link">Boligrådgivning</a>
+            <a href="#kontakt" class="nav-link">Kontakt</a>
+            <a href="index.html#om" class="nav-link">Om Bo & Råd</a>
+            <a id="loginBtn" href="login.html" class="nav-link">Log ind</a>
+        </nav>
+    </div>
+</header>
+
+<div class="page-container">
+
+
+    <main>
+        <h1>Log ind eller opret kundeprofil <i>helt gratis!</i></h1>
+
+        <div id="formDiv">
+            <form id="loginForm">
+                <label for="email">E-mail </label>
+                <input type="email" id="email" name="email" required>
+                <br><br>
+
+                <label for="password">Adgangskode </label>
+                <input type="password" id="password" name="password" required>
+                <br><br>
+
+                <button class="btn1" type="submit">Log ind</button>
+            </form>
+
+            <form id="registerForm" style="display:none;">
+                <label for="newEmail">E-mail </label>
+                <input type="email" id="newEmail" name="email" required>
+                <br><br>
+
+                <label for="newPassword">Adgangskode </label>
+                <input type="password" id="newPassword" name="password" required>
+                <br><br>
+                <label for="name">Navn </label>
+                <input type="text" id="name" name="name" required>
+                <br><br>
+
+                <label for="phoneNumber">Telefonnummer </label>
+                <input type="number" id="phoneNumber" name="phoneNumber" required>
+                <br>
+                <br>
+                <button class="btn1" type="submit">Opret</button>
+                <br>
+                <br>
+               <p>eller </p>
+                <a href="login.html"> <button class="btn1" type="button"> Log ind </button> </a>
+
+            </form>
+
+            <p id="message"></p>
+
+
+            <p id="or"> eller </p>
+            <button id="openRegister" type="button" class="btn1" >opret profil</button>
+
+        </div>
+    </main>
+
+
+    <div class="image-container">
+        <img src="images/Bo.png" alt="Beskrivelse af billede">
+        <div class="side-box">
+            <h2>Book et møde med mig på din gratis kundeprofil!</h2>
+            <p>Som kunde hos mig får du adgang til din egen sikre kundeprofil,
+                hvor alle dokumenter, aftaler og rådgivningsforløb er samlet ét sted.
+                Her kan du nemt booke møder, følge processen og finde alt relevant materiale, når du har brug for det.
+                Det giver dig et trygt, overskueligt og transparent forløb – fra første kontakt til afsluttet
+                opgave.</p>
+        </div>
+    </div>
+</div>
+
+<footer class="site-footer">
+
+
+    <!-- Begrænset indhold -->
+    <div class="footer-content">
+        <hr class="footer-separator">
+        <div class="footer-section">
+            <section id="kontakt">
+                <h2>Kontakt</h2>
+                <p>Er du ikke kunde hos mig endnu og har du generelle spørgsmål?</p>
+                <p>Kontakt mig på <strong>info@boograad.dk</strong></p>
+                <br>
+                <p>Vejnavn 100, By 2222</p>
+                <p>CVR nummer: XXXXXXXX</p>
+            </section>
+        </div>
+    </div>
+</footer>
+
+
+<script type="module" src="js/login.js"></script>
+<script type="module" src="js/navigation.js"></script>
+</body>
+</html>
