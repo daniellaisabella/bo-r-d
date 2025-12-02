@@ -36,6 +36,7 @@ public class UserRestController {
 
             User savedUser = userService.registerUser(email, password, name, phoneNumber, Role.CUSTOMER);
 
+
             Map<String, Object> response = new HashMap<>();
             response.put("id", savedUser.getUserId());
             response.put("email", savedUser.getEmail());
@@ -70,7 +71,7 @@ public class UserRestController {
 
 
             // Opret Authentication-objekt med roller
-            List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(user.getRole().toString()));
+            List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_"+user.getRole().toString()));
             Authentication auth = new UsernamePasswordAuthenticationToken(
                     user.getEmail(),
                     null,
@@ -112,8 +113,8 @@ public class UserRestController {
     }
 
 
-    @PostMapping("/logout")
-    public ResponseEntity<?> logout(HttpSession session) {
+    @PostMapping("/logoutuser")
+    public ResponseEntity<?> logoutUser(HttpSession session) {
         SecurityContextHolder.clearContext();
         session.invalidate();
         return ResponseEntity.ok("Logged out successfully");
