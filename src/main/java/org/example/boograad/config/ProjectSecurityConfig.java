@@ -23,9 +23,9 @@ public class ProjectSecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/index.html", "/products.html", "/login.html","/css/**", "/js/**",
-                                "/images/**","/register-customer", "/login", "/session", "/favicon.ico").permitAll()
+                                "/images/**","/register-customer", "/login", "/session", "/favicon.ico", "/createslot").permitAll()
                         .requestMatchers("/myProfile.html", "/availableslots", "/logoutuser", "/booking").authenticated()
-                        .requestMatchers("/adminProfile.html", "/createslot").hasRole("ADMIN") // Spring tilføjer automatisk "ROLE_"
+                        .requestMatchers("/adminProfile.html").hasRole("ADMIN") // Spring tilføjer automatisk "ROLE_"
 
                 )
                 .formLogin(form -> form.disable())
