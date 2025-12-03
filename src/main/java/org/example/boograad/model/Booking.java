@@ -23,6 +23,9 @@ public class Booking {
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    private String location;
+    private String notes;
+
     // JPA kræver en no-args constructor
   //  protected Booking() {}
 
@@ -56,5 +59,21 @@ public class Booking {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 }

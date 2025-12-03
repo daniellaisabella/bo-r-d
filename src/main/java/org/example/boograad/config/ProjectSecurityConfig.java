@@ -24,7 +24,7 @@ public class ProjectSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/index.html", "/products.html", "/login.html","/css/**", "/js/**",
                                 "/images/**","/register-customer", "/login", "/session", "/favicon.ico", "/createslot").permitAll()
-                        .requestMatchers("/myProfile.html", "/availableslots", "/logoutuser", "/booking").authenticated()
+                        .requestMatchers("/myProfile.html", "/availableslots", "/logoutuser", "/booking", "/mybookings", "/booking/{*}").authenticated()
                         .requestMatchers("/adminProfile.html").hasRole("ADMIN") // Spring tilføjer automatisk "ROLE_"
 
                 )

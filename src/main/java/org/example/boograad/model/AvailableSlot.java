@@ -13,8 +13,6 @@ public class AvailableSlot {
     private int slotId;
     private LocalDateTime startTime;
     private int durationMinutes;
-    private String location;
-    private String notes;
     private Boolean isBooked = false;
 
     @OneToOne(mappedBy = "slot")
@@ -45,27 +43,23 @@ public class AvailableSlot {
         this.durationMinutes = durationMinutes;
     }
 
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
-    }
-
     public Boolean getIsBooked() {
         return isBooked;
     }
 
     public void setIsBooked(Boolean booked) {
         isBooked = booked;
+    }
+
+    public void setBooked(Boolean booked) {
+        isBooked = booked;
+    }
+
+    public Booking getBooking() {
+        return booking;
+    }
+
+    public void setBooking(Booking booking) {
+        this.booking = booking;
     }
 }

@@ -21,7 +21,7 @@ public class BookingService {
     @Autowired
     private AvailableSlotRepository slotRepository;
 
-    public Booking bookSlot(int slotId, User user) throws Exception {
+    public Booking bookSlot(int slotId, User user, String location, String notes) throws Exception {
         // Find slot
         Optional<AvailableSlot> optionalSlot = slotRepository.findById(slotId);
         if(optionalSlot.isEmpty()) {
@@ -39,6 +39,8 @@ public class BookingService {
         Booking booking = new Booking();
         booking.setSlot(slot);
         booking.setUser(user);
+        booking.setLocation(location);
+        booking.setNotes(notes);
 
         // Marker slot som booket
         slot.setIsBooked(true);
@@ -51,5 +53,17 @@ public class BookingService {
     public List<Booking> getBookingsForUser(User user) {
         return bookingRepository.findByUser(user);
 
+    }
+
+    public Booking updateBooking(Booking booking) {
+        return bookingRepository.save(booking);
+    }
+
+    public Booking getBookingBySlotId(int slotId) {
+        return bookingRepository.findBySlot_SlotId(slotId);
+    }
+
+    public void deleteBooking(Booking booking) {
+        bookingRepository.delete(booking);
     }
 }

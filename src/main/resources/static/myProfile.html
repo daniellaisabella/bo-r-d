@@ -9,14 +9,22 @@
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/modal.css">
 </head>
-<!-- Booking Modal -->
+<!-- Modal -->
 <div id="bookingModal" class="modal">
     <div class="modal-content">
-        <span id="closeModal" class="close">&times;</span>
-        <h2>Book tid</h2>
-        <p id="modalInfo"></p>
-        <button id="confirmBookingBtn">Book</button>
-        <button id="cancelBookingBtn">Cancel</button>
+        <span id="closeModal" style="float:right; cursor:pointer;">&times;</span> <!-- SKAL FINNES -->
+        <div id="modalInfo" class="modal-header"></div>
+
+        <label>Lokation:</label>
+        <input type="text" id="bookingLocation">
+
+        <label>Noter:</label>
+        <textarea id="bookingNotes" rows="3"></textarea>
+
+        <button id="confirmBookingBtn">Book tid</button>
+        <button id="updateBookingBtn">Opdater booking</button>
+        <button id="deleteBookingBtn">Annuller booking</button>
+        <button id="cancelBookingBtn">Luk</button>
     </div>
 </div>
 <body>
