@@ -11,6 +11,8 @@ import org.example.boograad.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -34,7 +36,7 @@ public class BookingRestController {
             String location = payload.get("location");
             String notes = payload.get("notes");
 
-            if(location == null || location.isBlank() ||
+            if (location == null || location.isBlank() ||
                     notes == null || notes.isBlank()) {
                 return ResponseEntity.badRequest().body(Map.of("message", "Location og notes skal udfyldes"));
             }
@@ -74,19 +76,19 @@ public class BookingRestController {
             String location = request.get("location");
             String notes = request.get("notes");
 
-            if(location == null || location.isBlank() || notes == null || notes.isBlank()){
+            if (location == null || location.isBlank() || notes == null || notes.isBlank()) {
                 return ResponseEntity.badRequest().body(Map.of("message", "Location og notes skal udfyldes"));
             }
 
             // Find booking
             Booking booking = bookingService.getBookingBySlotId(slotId);
 
-            if(booking == null) {
+            if (booking == null) {
                 return ResponseEntity.status(404).body(Map.of("message", "Booking ikke fundet"));
             }
 
             // Check om booking tilhører den loggede bruger
-            if(booking.getUser().getUserId() != userId) {
+            if (booking.getUser().getUserId() != userId) {
                 return ResponseEntity.status(403).body(Map.of("message", "Du kan kun ændre dine egne bookings"));
             }
 
@@ -141,13 +143,12 @@ public class BookingRestController {
     }
 
 
-
     @GetMapping("/mybookings")
     public ResponseEntity<?> getMyBookings(Principal principal) {
         try {
             // Hent den logged-in bruger
             Optional<User> userOpt = userService.findByEmail(principal.getName());
-            if(userOpt.isEmpty()){
+            if (userOpt.isEmpty()) {
                 return ResponseEntity.status(401).body(Map.of("message", "User not found"));
             }
             User user = userOpt.get();
@@ -156,10 +157,10 @@ public class BookingRestController {
             List<Booking> userBookings = bookingService.getBookingsForUser(user);
 
             // Konverter til JSON-format til frontend
-            List<Map<String,Object>> bookingsForFrontend = new ArrayList<>();
-            for(Booking booking : userBookings){
+            List<Map<String, Object>> bookingsForFrontend = new ArrayList<>();
+            for (Booking booking : userBookings) {
                 AvailableSlot slot = booking.getSlot();
-                Map<String,Object> map = new HashMap<>();
+                Map<String, Object> map = new HashMap<>();
                 map.put("slotId", slot.getSlotId());
                 map.put("startTime", slot.getStartTime());
                 map.put("durationMinutes", slot.getDurationMinutes());
@@ -172,9 +173,48 @@ public class BookingRestController {
 
             return ResponseEntity.ok(bookingsForFrontend);
 
-        } catch(Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("error", e.getMessage()));
         }
     }
+    @GetMapping("/allbookings")
+    public ResponseEntity<?> getAllBookings(Principal principal) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(401).body(Map.of("message", "Not authenticated"));
+        }
+
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        if (!isAdmin) {
+            return ResponseEntity.status(403).body(Map.of("message", "User is not Admin"));
+        }
+
+        // Hent alle bookings
+        List<Booking> allBookings = bookingService.getAllBooking();
+        List<Map<String, Object>> allBookingsFrontend = new ArrayList<>();
+
+        for (Booking booking : allBookings) {
+            AvailableSlot slot = booking.getSlot();
+            Map<String, Object> map = new HashMap<>();
+            map.put("slotId", slot.getSlotId());
+            map.put("startTime", slot.getStartTime());
+            map.put("durationMinutes", slot.getDurationMinutes());
+            map.put("location", booking.getLocation());
+            map.put("notes", booking.getNotes());
+            map.put("isBooked", true);
+            map.put("userId", booking.getUser().getUserId());
+            map.put("name", booking.getUser().getName());
+            map.put("email", booking.getUser().getEmail());
+            map.put("phonenumber", booking.getUser().getPhoneNumber());
+
+            allBookingsFrontend.add(map);
+        }
+
+        return ResponseEntity.ok(allBookingsFrontend);
+    }
+
 }

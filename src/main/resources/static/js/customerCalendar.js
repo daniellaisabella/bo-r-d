@@ -1,4 +1,4 @@
-import { fetchAnyUrl } from './moduleJSON.js';
+import { fetchAnyUrl, fetchSession } from './moduleJSON.js';
 
 document.addEventListener('DOMContentLoaded', async function() {
 
@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     const locationInput = document.getElementById("bookingLocation");
     const notesInput = document.getElementById("bookingNotes");
+    const adminUserInfo = document.getElementById("adminUserInfo"); // Til admin visning
 
     let selectedEvent = null;
 
@@ -31,9 +32,29 @@ document.addEventListener('DOMContentLoaded', async function() {
             // Nulstil felter og skjul alle knapper
             locationInput.value = "";
             notesInput.value = "";
+            if(adminUserInfo) adminUserInfo.textContent = "";
+
             confirmBtn.style.display = "none";
             updateBtn.style.display = "none";
             deleteBtn.style.display = "none";
+
+            let sessionRole = calendarEl.dataset.sessionRole || 'USER';
+
+            // ADMIN CASE
+            if(sessionRole === "ADMIN") {
+                locationInput.value = slot.location || "";
+                notesInput.value = slot.notes || "";
+                locationInput.disabled = true;
+                notesInput.disabled = true;
+
+                modalInfo.textContent = `Booking\nTidspunkt: ${info.event.start.toLocaleString()}\nVarighed: ${slot.duration} minutter`;
+
+                if(slot.userName && slot.userEmail && adminUserInfo){
+                    adminUserInfo.textContent =
+                        `Bruger: ${slot.userName}\nEmail: ${slot.userEmail}\nTelefon: ${slot.userPhone || "Ikke angivet"}`;
+                }
+                return; // Admin kan ikke ændre
+            }
 
             // CASE 1: BRUGERENS EGEN BOOKING
             if (slot.isBooked && slot.bookedByMe) {
@@ -65,6 +86,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         selectedEvent = null;
         locationInput.value = "";
         notesInput.value = "";
+        if(adminUserInfo) adminUserInfo.textContent = "";
     };
 
     closeModal.onclick = closeModalHandler;
@@ -211,31 +233,67 @@ document.addEventListener('DOMContentLoaded', async function() {
         console.error("Fejl ved hentning af slots", e);
     }
 
-    // HENT EGNE BOOKINGS
-    try {
-        const myBookings = await fetchAnyUrl("mybookings");
+    // TJEK SESSION
+    let session = await fetchSession();
+    calendarEl.dataset.sessionRole = session.role; // Gem role i DOM til modal
 
-        myBookings.forEach(slot => {
-            const start = slot.startTime;
-            const end = new Date(new Date(start).getTime() + slot.durationMinutes * 60000);
+    if(session.role !== "ADMIN"){
+        // HENT EGNE BOOKINGS
+        try {
+            const myBookings = await fetchAnyUrl("mybookings");
 
-            calendar.addEvent({
-                title: "Din booking",
-                start: start,
-                end: end,
-                color: "blue",
-                extendedProps: {
-                    duration: slot.durationMinutes,
-                    location: slot.location,
-                    notes: slot.notes,
-                    slotId: slot.slotId,
-                    isBooked: true,
-                    bookedByMe: true
-                }
+            myBookings.forEach(slot => {
+                const start = slot.startTime;
+                const end = new Date(new Date(start).getTime() + slot.durationMinutes * 60000);
+
+                calendar.addEvent({
+                    title: "Din booking",
+                    start: start,
+                    end: end,
+                    color: "blue",
+                    extendedProps: {
+                        duration: slot.durationMinutes,
+                        location: slot.location,
+                        notes: slot.notes,
+                        slotId: slot.slotId,
+                        isBooked: true,
+                        bookedByMe: true
+                    }
+                });
             });
-        });
-    } catch(e){
-        console.error("Fejl ved hentning af egne bookings", e);
+        } catch(e){
+            console.error("Fejl ved hentning af egne bookings", e);
+        }
+    } else {
+        // ADMIN: HENT ALLE BOOKINGS MED BRUGERINFO
+        try {
+            const allBookings = await fetchAnyUrl("allbookings");
+
+            allBookings.forEach(slot => {
+                const start = slot.startTime;
+                const end = new Date(new Date(start).getTime() + slot.durationMinutes * 60000);
+
+                calendar.addEvent({
+                    title: "Booking",
+                    start: start,
+                    end: end,
+                    color: "blue",
+                    extendedProps: {
+                        duration: slot.durationMinutes,
+                        location: slot.location,
+                        notes: slot.notes,
+                        slotId: slot.slotId,
+                        isBooked: true,
+                        bookedByMe: false,
+                        userName: slot.name,
+                        userEmail: slot.email,
+                        userPhone: slot.phonenumber
+                    }
+                });
+            });
+        } catch(e){
+            console.error("Fejl ved hentning af alle bookings", e);
+        }
     }
 
     calendar.render();

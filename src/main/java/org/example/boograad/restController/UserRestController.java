@@ -71,7 +71,7 @@ public class UserRestController {
 
 
             // Opret Authentication-objekt med roller
-            List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_"+user.getRole().toString()));
+            List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_"+user.getRole().toString().toUpperCase()));
             Authentication auth = new UsernamePasswordAuthenticationToken(
                     user.getEmail(),
                     null,
