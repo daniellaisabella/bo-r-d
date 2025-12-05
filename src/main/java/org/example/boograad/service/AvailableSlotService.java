@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AvailableSlotService {
@@ -20,4 +21,12 @@ public class AvailableSlotService {
 
     public AvailableSlot saveSlot(AvailableSlot slot) {
         return availableSlotRepository.save(slot);    }
+
+    public void deleteSlot(int slotId) {
+        availableSlotRepository.deleteById(slotId);
+    }
+
+    public Optional<AvailableSlot> findById(int slotId) {
+        return availableSlotRepository.findById(slotId);
+    }
 }

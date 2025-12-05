@@ -49,6 +49,20 @@ public class AvailableSlotRestController {
             // Hent værdier fra request
             LocalDateTime startTime = LocalDateTime.parse(request.get("startTime"));
             int durationMinutes = Integer.parseInt(request.get("durationMinutes"));
+            LocalDateTime endTime = startTime.plusMinutes(durationMinutes);
+
+            // Check for overlapping slots
+            List<AvailableSlot> existingSlots = availableSlotService.getAvailableSlots();
+            for (AvailableSlot slot : existingSlots) {
+                LocalDateTime existingStart = slot.getStartTime();
+                LocalDateTime existingEnd = existingStart.plusMinutes(slot.getDurationMinutes());
+
+                // Overlap condition
+                if (startTime.isBefore(existingEnd) && endTime.isAfter(existingStart)) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body("Kan ikke oprette slot, da det overlapper med en eksisterende tid.");
+                }
+            }
 
             // Opret AvailableSlot objekt
             AvailableSlot slot = new AvailableSlot();
@@ -66,6 +80,37 @@ public class AvailableSlotRestController {
             return ResponseEntity.badRequest().body("Failed to create slot");
         }
     }
+
+    @DeleteMapping("/deleteslot/{slotId}")
+    public ResponseEntity<?> deleteSlot(@PathVariable int slotId) {
+        try {
+            // Find slot ud fra ID
+            Optional<AvailableSlot> slotOpt = availableSlotService.findById(slotId);
+
+            if (slotOpt.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("Slot findes ikke.");
+            }
+
+            AvailableSlot slot = slotOpt.get();
+
+            // Må ikke slettes hvis det er booket
+            if (slot.getIsBooked() != null && slot.getIsBooked()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("Slot kan ikke slettes, da det er booket.");
+            }
+
+            // Slet slot
+            availableSlotService.deleteSlot(slotId);
+
+            return ResponseEntity.ok("Slot slettet.");
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Kunne ikke slette slot.");
+        }
+    }
+
 
 
 

@@ -25,7 +25,7 @@ public class ProjectSecurityConfig {
                         .requestMatchers("/", "/index.html", "/products.html", "/login.html","/css/**", "/js/**",
                                 "/images/**","/register-customer", "/login", "/session", "/favicon.ico").permitAll()
                         .requestMatchers("/myProfile.html", "/availableslots", "/logoutuser", "/booking", "/mybookings", "/booking/{*}").authenticated()
-                        .requestMatchers("/adminProfile.html", "/createslot", "/allbookings").hasRole("ADMIN") // Spring tilføjer automatisk "ROLE_"
+                        .requestMatchers("/adminProfile.html", "/createslot", "/allbookings", "/deleteslot/{*}").hasRole("ADMIN") // Spring tilføjer automatisk "ROLE_"
 
                 )
                 .formLogin(form -> form.disable())

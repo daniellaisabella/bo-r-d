@@ -37,5 +37,9 @@ button {
     cursor: pointer;
 }
 
+.cancelBookingBtn:hover {
+    background-color: #1f2d3d ;
+}
+
 #confirmBookingBtn { background-color: #4CAF50; color: white; }
-#cancelBookingBtn { background-color: #f44336; color: white; }
+#cancelBookingBtn { background-color: #324556; color: white; }

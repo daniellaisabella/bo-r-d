@@ -25,10 +25,36 @@
 
         <p id="adminUserInfo"></p>
 
-        <button id="cancelBookingBtn">Luk</button>
+        <button id="cancelBookingBtn" style="">Luk</button>
         <button id="confirmBookingBtn" style="display:none;"></button>
         <button id="updateBookingBtn" style="display:none;"></button>
-        <button id="deleteBookingBtn" style="display:none;"></button>
+        <button id="deleteBookingBtn" style="display:none; background:#c0392b; color:white;">Slet tid</button>
+
+
+    </div>
+</div>
+<!-- Modal (ADMIN kan oprette availableSlot) -->
+<div id="createSlotModal" class="modal">
+    <div class="modal-content">
+        <span id="closeSlotModal" style="float:right; cursor:pointer;">&times;</span>
+
+        <div id="SlotModalInfo" class="modal-header"></div>
+
+        <label>Dato:</label>
+        <input type="date" id="dateSlot" required>
+
+        <label>Start tid:</label>
+        <input type="time" id="timeSlot" required>
+
+        <label>Varighed: (i minutter)</label>
+        <input type="number" id="durationSlot" required>
+
+
+
+        <p id="adminUserSlotInfo"></p>
+
+        <button id="cancelSlotBtn">Luk</button>
+        <button id="confirmSlotBtn" class="confirm-btn">Opret tid</button>
 
     </div>
 </div>
