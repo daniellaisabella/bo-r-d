@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             if(response.ok){
                 alert("Booking gennemført!");
 
-                selectedEvent.setProp("color", "blue");
+                selectedEvent.setProp("color", isPast(selectedEvent.start) ? "gray" : "blue");
                 selectedEvent.setProp("title", "Din booking");
                 selectedEvent.setExtendedProp("isBooked", true);
                 selectedEvent.setExtendedProp("bookedByMe", true);
@@ -272,6 +272,10 @@ document.addEventListener('DOMContentLoaded', async function() {
     calendarEl.dataset.sessionRole = session.role;
 
     // ----------- HENT BOOKINGER ----------- //
+    function isPast(date) {
+        return new Date(date) < new Date();
+    }
+
     if(session.role !== "ADMIN"){
         try {
             const myBookings = await fetchAnyUrl("mybookings");
@@ -284,7 +288,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     title: "Din booking",
                     start: start,
                     end: end,
-                    color: "blue",
+                    color: isPast(start) ? "gray" : "blue",
                     extendedProps: {
                         duration: slot.durationMinutes,
                         location: slot.location,
@@ -311,7 +315,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     title: "Booking",
                     start: start,
                     end: end,
-                    color: "blue",
+                    color: isPast(start) ? "gray" : "blue",
                     extendedProps: {
                         duration: slot.durationMinutes,
                         location: slot.location,
@@ -400,16 +404,12 @@ document.addEventListener('DOMContentLoaded', async function() {
                 durationSlot.value = "";
 
             } else {
-                const data = await response.json().catch(() => null);
-                if(data && data.error){
-                    alert("Kunne ikke oprette slot: " + data.error);
-                } else {
-                    alert("Kunne ikke oprette slot.");
-                }
+                const errorText = await response.text();
+                alert(errorText);
             }
         } catch (e) {
             console.error(e);
-            alert("Fejl ved oprettelse af slot.");
+            alert("Fejl ved oprettelse af slot." + e.message);
         }
     };
 
