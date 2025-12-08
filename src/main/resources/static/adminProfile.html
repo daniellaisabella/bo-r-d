@@ -10,29 +10,38 @@
     <link rel="stylesheet" href="css/modal.css">
 </head>
 
-<!-- Modal (ADMIN kan kun se info) -->
+<!-- Modal -->
 <div id="bookingModal" class="modal">
     <div class="modal-content">
         <span id="closeModal" style="float:right; cursor:pointer;">&times;</span>
 
         <div id="modalInfo" class="modal-header"></div>
 
+        <!-- NYT: Dato og tid for admin -->
+        <label>Dato:</label>
+        <input type="date" id="bookingDate">
+
+        <label>Start tid:</label>
+        <input type="time" id="bookingTime">
+
+        <label>Varighed (minutter):</label>
+        <input type="number" id="bookingDuration" min="1">
+
         <label>Lokation:</label>
-        <input type="text" id="bookingLocation" disabled>
+        <input type="text" id="bookingLocation">
 
         <label>Noter:</label>
-        <textarea id="bookingNotes" rows="3" disabled></textarea>
+        <textarea id="bookingNotes" rows="3"></textarea>
 
         <p id="adminUserInfo"></p>
 
-        <button id="cancelBookingBtn" style="">Luk</button>
+        <button id="cancelBookingBtn">Luk</button>
         <button id="confirmBookingBtn" style="display:none;"></button>
-        <button id="updateBookingBtn" style="display:none;"></button>
+        <button id="updateBookingBtn" style="display:none;">Opdater</button>
         <button id="deleteBookingBtn" style="display:none; background:#c0392b; color:white;">Slet tid</button>
-
-
     </div>
 </div>
+
 <!-- Modal (ADMIN kan oprette availableSlot) -->
 <div id="createSlotModal" class="modal">
     <div class="modal-content">
