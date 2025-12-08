@@ -15,6 +15,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.format.DateTimeFormatter;
+import java.time.ZoneId;
+
 import java.security.Principal;
 import java.util.*;
 
@@ -28,6 +31,8 @@ public class BookingRestController {
     private UserService userService;
     @Autowired
     AvailableSlotService availableSlotService;
+
+    DateTimeFormatter isoFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
     @PostMapping("/booking")
     public ResponseEntity<?> bookSlot(@RequestBody Map<String, String> payload, Principal principal) {
@@ -162,7 +167,8 @@ public class BookingRestController {
                 AvailableSlot slot = booking.getSlot();
                 Map<String, Object> map = new HashMap<>();
                 map.put("slotId", slot.getSlotId());
-                map.put("startTime", slot.getStartTime());
+                // Hvis startTime er LocalDateTime
+                map.put("startTime", slot.getStartTime().format(isoFormatter));
                 map.put("durationMinutes", slot.getDurationMinutes());
                 map.put("location", booking.getLocation());
                 map.put("notes", booking.getNotes());
@@ -178,6 +184,7 @@ public class BookingRestController {
                     .body(Map.of("error", e.getMessage()));
         }
     }
+
     @GetMapping("/allbookings")
     public ResponseEntity<?> getAllBookings(Principal principal) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -201,7 +208,7 @@ public class BookingRestController {
             AvailableSlot slot = booking.getSlot();
             Map<String, Object> map = new HashMap<>();
             map.put("slotId", slot.getSlotId());
-            map.put("startTime", slot.getStartTime());
+            map.put("startTime", slot.getStartTime().format(isoFormatter));
             map.put("durationMinutes", slot.getDurationMinutes());
             map.put("location", booking.getLocation());
             map.put("notes", booking.getNotes());
