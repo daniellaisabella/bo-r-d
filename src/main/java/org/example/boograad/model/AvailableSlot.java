@@ -62,4 +62,6 @@ public class AvailableSlot {
     public void setBooking(Booking booking) {
         this.booking = booking;
     }
+
+
 }

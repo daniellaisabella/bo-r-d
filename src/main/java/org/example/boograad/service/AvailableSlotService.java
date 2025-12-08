@@ -20,7 +20,8 @@ public class AvailableSlotService {
 
 
     public AvailableSlot saveSlot(AvailableSlot slot) {
-        return availableSlotRepository.save(slot);    }
+        return availableSlotRepository.save(slot);
+    }
 
     public void deleteSlot(int slotId) {
         availableSlotRepository.deleteById(slotId);

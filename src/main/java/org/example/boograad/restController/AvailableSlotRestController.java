@@ -109,9 +109,84 @@ public class AvailableSlotRestController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Kunne ikke slette slot.");
         }
+
+
     }
 
+    @DeleteMapping("/deleteOldSlots")
+    public ResponseEntity<?> deleteOldSlots() {
+        try {
+            List<AvailableSlot> allSlots = availableSlotService.getAvailableSlots();
 
+            for (AvailableSlot availableSlot : allSlots){
+                if(availableSlot.getStartTime().isBefore(LocalDateTime.now())){
+                    availableSlotService.deleteSlot(availableSlot.getSlotId());
+                }
+            }
+
+            return ResponseEntity.ok("Gamle ledige slots slettet.");
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Kunne ikke slette slots.");
+        }
+    }
+
+    @PutMapping("/updateslot")
+    public ResponseEntity<?> updateSlot(@RequestBody Map<String, String> request) {
+        try {
+            int slotId = Integer.parseInt(request.get("slotId"));
+            Optional<AvailableSlot> slotOpt = availableSlotService.findById(slotId);
+
+            if (slotOpt.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("Slot findes ikke.");
+            }
+
+            AvailableSlot slot = slotOpt.get();
+
+            // --- Hent nye værdier fra request --- //
+            LocalDateTime newStart = LocalDateTime.parse(request.get("startTime"));
+            int newDuration = Integer.parseInt(request.get("durationMinutes"));
+            String newLocation = request.get("location");
+            String newNotes = request.get("notes");
+            LocalDateTime newEnd = newStart.plusMinutes(newDuration);
+
+            // --- Tjek overlap med andre slots --- //
+            List<AvailableSlot> allSlots = availableSlotService.getAvailableSlots();
+            for (AvailableSlot other : allSlots) {
+                if (other.getSlotId() == slotId) continue; // ignorer sig selv
+                LocalDateTime otherStart = other.getStartTime();
+                LocalDateTime otherEnd = otherStart.plusMinutes(other.getDurationMinutes());
+
+                if (newStart.isBefore(otherEnd) && newEnd.isAfter(otherStart)) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body("Kan ikke opdatere slot, da det overlapper med en eksisterende tid.");
+                }
+            }
+
+            // --- Opdater ledigt slot --- //
+            slot.setStartTime(newStart);
+            slot.setDurationMinutes(newDuration);
+
+            // --- Hvis der er en booking, opdater bookingens location og notes --- //
+            Booking booking = slot.getBooking();
+            if (booking != null) {
+                booking.setLocation(newLocation);
+                booking.setNotes(newNotes);
+                bookingService.saveBooking(booking);
+            }
+
+            availableSlotService.saveSlot(slot);
+
+            return ResponseEntity.ok(slot);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Fejl ved opdatering af slot: " + e.getMessage());
+        }
+    }
 
 
 }

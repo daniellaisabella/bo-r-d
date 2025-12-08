@@ -70,4 +70,8 @@ public class BookingService {
     public List<Booking> getAllBooking() {
         return bookingRepository.findAll();
     }
+
+    public void saveBooking(Booking booking) {
+        bookingRepository.save(booking);
+    }
 }

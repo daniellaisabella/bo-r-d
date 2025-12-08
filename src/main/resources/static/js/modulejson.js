@@ -77,5 +77,19 @@ async function fetchSession() {
     }
 }
 
+async function deleteOldSlots(){
+    const fetchOptions = {
+        method: "DELETE",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: ""
+    }
+    const response = await fetch(baseurl+"deleteOldSlots", fetchOptions)
+    return response
+}
 
-export {postObjectAsJson, fetchAnyUrl, updateObjectAsJson, deleteObjectAsJson, fetchSession, baseurl}
+
+
+export {postObjectAsJson, fetchAnyUrl, updateObjectAsJson, deleteObjectAsJson, fetchSession, deleteOldSlots, baseurl}
