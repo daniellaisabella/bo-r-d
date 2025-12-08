@@ -1,4 +1,5 @@
-import { postObjectAsJson } from './modulejson.js';
+import {fetchSession, postObjectAsJson} from './modulejson.js';
+import {checkSession} from './navigation.js';
 
 document.getElementById('openRegister').addEventListener('click', () => {
     document.getElementById('loginForm').style.display = 'none';
@@ -20,8 +21,16 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     );
 
     if (response.ok) {
-        document.getElementById('message').textContent = 'Succesfuld log ind!';
-        window.location.href = 'index.html';
+        document.getElementById('message').textContent = 'Logger ind...';
+        let role = await checkSession()
+        setTimeout(() => {
+            if (role !== "ADMIN"){
+                window.location.href="myProfile.html"
+            } else {
+                window.location.href="adminProfile.html"
+            }
+        }, 1200);
+
     } else {
         document.getElementById('message').textContent = 'Forkert email eller password';
     }

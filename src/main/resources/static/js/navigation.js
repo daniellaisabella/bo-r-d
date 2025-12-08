@@ -2,46 +2,54 @@ console.log("hej fra navigation")
 
 import {fetchSession, baseurl} from './modulejson.js';
 
+document.addEventListener("DOMContentLoaded", async () => {
 
 
-let loginBtn = document.getElementById("loginBtn")
+    // --- CHECK SESSION ---
+    await checkSession();
 
-checkSession()
+    // --- LOGOUT BUTTON ---
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', async function(e) {
+            e.preventDefault();
 
-async function checkSession() {
+            try {
+                const response = await fetch(baseurl + "logoutuser", {
+                    method: 'POST',
+                    credentials: 'include'
+                });
 
-    try {
-        let user = await fetchSession()
-        if (user != null) {
-            loginBtn.textContent = "Min Profil"
-            if (user.role !== "ADMIN") {
-                loginBtn.href = "myProfile.html"
-            } else {
-                loginBtn.href = "adminProfile.html"
+                if (response.ok) {
+                    window.location.href = baseurl + "index.html";
+                } else {
+                    console.error('Logout fejlede');
+                }
+            } catch (err) {
+                console.error('Fejl ved logout:', err);
             }
-        }
-    } catch
-        (error) {
-        console.log("Error fetching session " + error)
+        });
     }
 
+});
+
+
+// ------------ FUNCTIONS ------------
+async function checkSession() {
+    try {
+        let user = await fetchSession();
+        const loginBtn = document.getElementById("loginBtn");
+
+        if (loginBtn && user != null) {
+            loginBtn.textContent = "Min Profil";
+            loginBtn.href = user.role !== "ADMIN"
+                ? "myProfile.html"
+                : "adminProfile.html";
+            return user.role
+        }
+    } catch (error) {
+        console.log("Error fetching session " + error);
+    }
 }
 
-/*------------------ LOGOUT--------------*/
-document.getElementById('logoutBtn').addEventListener('click', async function(e) {
-    e.preventDefault(); // forhindre at <a> navigerer
-
-    try {
-        // Kald backend for at invalidere session
-        const response = await fetch(baseurl +"logoutuser", { method: 'POST', credentials: 'include' });
-
-        if (response.ok) {
-            // Redirect til index.html
-            window.location.href = baseurl +"index.html";
-        } else {
-            console.error('Logout fejlede');
-        }
-    } catch (err) {
-        console.error('Fejl ved logout:', err);
-    }
-});
+export {checkSession};
