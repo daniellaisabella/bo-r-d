@@ -152,7 +152,6 @@ document.addEventListener('DOMContentLoaded', async function() {
 
             if(response.ok){
                 alert("Booking gennemført!");
-
                 selectedEvent.setProp("color", isPast(selectedEvent.start) ? "gray" : "blue");
                 selectedEvent.setProp("title", "Din booking");
                 selectedEvent.setExtendedProp("isBooked", true);
