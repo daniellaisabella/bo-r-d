@@ -93,7 +93,9 @@ public class BookingRestController {
             }
 
             // Check om booking tilhører den loggede bruger
-            if (booking.getUser().getUserId() != userId) {
+            if (session.getAttribute("role").equals("ADMIN")){
+
+            } else if (booking.getUser().getUserId() != userId) {
                 return ResponseEntity.status(403).body(Map.of("message", "Du kan kun ændre dine egne bookings"));
             }
 

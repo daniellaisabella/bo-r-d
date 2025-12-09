@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 bookingTime.disabled = false;
                 bookingDuration.disabled = false;
 
-                modalInfo.textContent = `Booking\nTidspunkt: ${selectedEvent.start.toLocaleString()}\nVarighed: ${slot.duration} minutter`;
+                modalInfo.innerHTML = `Booking\nTidspunkt: ${selectedEvent.start.toLocaleString()}\nVarighed: ${slot.duration} minutter`;
 
                 if(slot.userName && slot.userEmail && adminUserInfo) {
                     adminUserInfo.textContent = `Bruger: ${slot.userName}\nEmail: ${slot.userEmail}\nTelefon: ${slot.userPhone || "Ikke angivet"}`;
@@ -71,17 +71,17 @@ document.addEventListener('DOMContentLoaded', async function () {
             } else {
                 // USER logik
                 if(slot.isBooked && slot.bookedByMe) {
-                    modalInfo.textContent = `Din booking\nTidspunkt: ${selectedEvent.start.toLocaleString()}\nVarighed: ${slot.duration} minutter`;
+                    modalInfo.innerHTML = `Din booking\nTidspunkt: ${selectedEvent.start.toLocaleString()}\nVarighed: ${slot.duration} minutter`;
                     locationInput.disabled = false;
                     notesInput.disabled = false;
                     updateBtn.style.display = "inline-block";
                     deleteBtn.style.display = "inline-block";
                 } else if(slot.isBooked) {
-                    modalInfo.textContent = "Dette tidspunkt er allerede booket af en anden.";
+                    modalInfo.innerHTML = "Dette tidspunkt er allerede booket af en anden.";
                     locationInput.disabled = true;
                     notesInput.disabled = true;
                 } else {
-                    modalInfo.textContent = `Vil du booke denne tid?\nTidspunkt: ${selectedEvent.start.toLocaleString()}\nVarighed: ${slot.duration} minutter`;
+                    modalInfo.innerHTML = `Vil du booke denne tid?\nTidspunkt: ${selectedEvent.start.toLocaleString()}\nVarighed: ${slot.duration} minutter`;
                     confirmBtn.style.display = "inline-block";
                 }
             }

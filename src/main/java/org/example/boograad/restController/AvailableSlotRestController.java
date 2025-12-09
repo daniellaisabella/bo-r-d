@@ -94,14 +94,15 @@ public class AvailableSlotRestController {
 
             AvailableSlot slot = slotOpt.get();
 
-            // Må ikke slettes hvis det er booket
-            if (slot.getIsBooked() != null && slot.getIsBooked()) {
+            if (slot.getIsBooked() || slot.getBooking()!=null){
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body("Slot kan ikke slettes, da det er booket.");
+                        .body("Slot er booked.");
             }
 
             // Slet slot
             availableSlotService.deleteSlot(slotId);
+
+
 
             return ResponseEntity.ok("Slot slettet.");
 
