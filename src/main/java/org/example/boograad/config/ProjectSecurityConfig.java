@@ -1,5 +1,6 @@
 package org.example.boograad.config;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,11 +23,15 @@ public class ProjectSecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/index.html", "/products.html", "/login.html","/css/**", "/js/**",
-                                "/images/**","/register-customer", "/login", "/session", "/favicon.ico").permitAll()
-                        .requestMatchers("/myProfile.html", "/myBalance").authenticated()
+                                "/images/**","/register-customer", "/login", "/session", "/favicon.ico","/logoutuser").permitAll()
+                        .requestMatchers("/myProfile.html", "/availableslots", "/booking", "/mybookings", "/booking/{*}", "/deleteOldSlots").authenticated()
+                        .requestMatchers("/adminProfile.html", "/createslot", "/allbookings", "/deleteslot/{*}", "/updateslot").hasRole("ADMIN") // Spring tilføjer automatisk "ROLE_"
+
                 )
                 .formLogin(form -> form.disable())
                 .httpBasic(httpBasic -> httpBasic.disable());
+
+
 
         return http.build();
     }

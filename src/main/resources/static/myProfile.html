@@ -2,10 +2,75 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Min profil</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/topbar.css">
+    <link rel="stylesheet" href="css/imageindex.css">
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/modal.css">
 </head>
-<body>
-<h1>Min Profil</h1>
+<!-- Modal -->
+<div id="bookingModal" class="modal">
+    <div class="modal-content">
+        <span id="closeModal" style="float:right; cursor:pointer;">&times;</span> <!-- SKAL FINNES -->
+        <div id="modalInfo" class="modal-header"></div>
 
+        <label>Lokation:</label>
+        <input type="text" id="bookingLocation">
+
+        <label>Noter:</label>
+        <textarea id="bookingNotes" rows="3"></textarea>
+
+        <button id="confirmBookingBtn">Book tid</button>
+        <button id="updateBookingBtn">Opdater booking</button>
+        <button id="deleteBookingBtn">Annuller booking</button>
+        <button id="cancelBookingBtn">Luk</button>
+    </div>
+</div>
+<body>
+
+<header class="topbar">
+    <div class="topbar-content">
+        <!-- Logo / firmanavn -->
+        <div class="logo">
+            <a href="index.html">Bo & Råd</a>
+        </div>
+
+        <!-- Navigation menu -->
+        <nav class="nav-menu">
+            <a href="products.html" class="nav-link">Boligrådgivning</a>
+            <a href="#kontakt" class="nav-link">Kontakt</a>
+            <a href="#om" class="nav-link">Om Bo & Råd</a>
+            <a  id="logoutBtn" class="nav-link">Log ud</a>
+        </nav>
+    </div>
+</header>
+
+<div class="page-container">
+    <h1>Min Profil</h1>
+
+    <h2>Kalender</h2>
+
+    <!-- Kalenderen -->
+    <div id="calendar"></div>
+
+
+    <div class="image-container">
+        <img src="images/Bo.png" alt="Beskrivelse af billede">
+        <div class="side-box">
+            <h2>Velkommen til Bo & Råd</h2>
+            <p>Her på siden kan du finde information om mig, Bo Andersen, og de ydelser og services, jeg tilbyder som
+                selvstændig bygningskonstruktør. Jeg rådgiver inden for klimarådgivning, klimaplaner og boligrelaterede
+                projekter, så du kan få professionel vejledning til dit byggeri eller din bolig.</p>
+        </div>
+    </div>
+
+
+    <!-- JS -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+    <script type="module" src="js/userCalender.js"></script>
+    <script type="module" src="js/navigation.js"></script>
+
+</div>
 </body>
 </html>

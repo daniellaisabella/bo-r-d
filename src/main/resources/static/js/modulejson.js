@@ -45,8 +45,14 @@ async function deleteObjectAsJson(path) {
 }
 
 
-function fetchAnyUrl(path) {
-    return fetch(path, {credentials: "include"}).then(response => response.json().catch(error => console.error("Handled error xx", error)))
+async function fetchAnyUrl(path) {
+    const response = await fetch(baseurl + path, { credentials: "include" });
+
+    if (!response.ok) {
+        throw new Error("HTTP " + response.status);
+    }
+
+    return response.json();
 }
 
 async function fetchSession() {
@@ -71,5 +77,19 @@ async function fetchSession() {
     }
 }
 
+async function deleteOldSlots(){
+    const fetchOptions = {
+        method: "DELETE",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: ""
+    }
+    const response = await fetch(baseurl+"deleteOldSlots", fetchOptions)
+    return response
+}
 
-export {postObjectAsJson, fetchAnyUrl, updateObjectAsJson, deleteObjectAsJson, fetchSession}
+
+
+export {postObjectAsJson, fetchAnyUrl, updateObjectAsJson, deleteObjectAsJson, fetchSession, deleteOldSlots, baseurl}

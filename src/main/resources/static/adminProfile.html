@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin – Bookinger</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/topbar.css">
+    <link rel="stylesheet" href="css/imageindex.css">
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/modal.css">
+</head>
+
+<!-- Modal -->
+<div id="bookingModal" class="modal">
+    <div class="modal-content">
+        <span id="closeModal" style="float:right; cursor:pointer;">&times;</span>
+
+        <!-- Dato og tid for admin -->
+        <label>Dato:</label>
+        <input type="date" id="bookingDate">
+
+        <label>Start tid:</label>
+        <input type="time" id="bookingTime">
+
+        <label>Varighed (minutter):</label>
+        <input type="number" id="bookingDuration" min="1">
+
+        <label>Lokation:</label>
+        <input type="text" id="bookingLocation">
+
+        <label>Noter:</label>
+        <textarea id="bookingNotes" rows="3"></textarea>
+
+        <p id="adminUserInfo"></p>
+
+        <button id="cancelBookingBtn">Luk</button>
+        <button id="confirmBookingBtn" style="display:none;">Gem booking</button>
+        <button id="updateBookingBtn" style="display:none;">Opdater</button>
+        <button id="deleteBookingBtn" style="display:none; background:#c0392b; color:white;">Slet tid</button>
+    </div>
+</div>
+
+<!-- Modal (ADMIN kan oprette availableSlot) -->
+<div id="createSlotModal" class="modal">
+    <div class="modal-content">
+        <span id="closeSlotModal" style="float:right; cursor:pointer;">&times;</span>
+
+        <div id="SlotModalInfo" class="modal-header"></div>
+
+        <label>Dato:</label>
+        <input type="date" id="dateSlot" required>
+
+        <label>Start tid:</label>
+        <input type="time" id="timeSlot" required>
+
+        <label>Varighed: (i minutter)</label>
+        <input type="number" id="durationSlot" required>
+
+
+
+        <p id="adminUserSlotInfo"></p>
+
+        <button id="cancelSlotBtn">Luk</button>
+        <button id="confirmSlotBtn" class="confirm-btn">Opret tid</button>
+
+    </div>
+</div>
+
+<body>
+<header class="topbar">
+    <div class="topbar-content">
+        <div class="logo">
+            <a href="index.html">Bo & Råd</a>
+        </div>
+        <nav class="nav-menu">
+            <a href="products.html" class="nav-link">Boligrådgivning</a>
+            <a href="#kontakt" class="nav-link">Kontakt</a>
+            <a href="#om" class="nav-link">Om Bo & Råd</a>
+            <a id="logoutBtn" class="nav-link">Log ud</a>
+        </nav>
+    </div>
+</header>
+
+<div class="page-container">
+    <h1>Admin – Alle Bookinger</h1>
+    <h2>Kalender</h2>
+    <div id="calendar"></div>
+
+    <div class="image-container">
+        <img src="images/Bo.png" alt="">
+        <div class="side-box">
+            <h2>Admin Panel</h2>
+            <p>Du kan se alle kunders bookinger i kalenderen, inkl. information om hvem der har booket.</p>
+        </div>
+    </div>
+
+    <!-- JS -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+    <script type="module" src="js/adminCalender.js"></script>
+    <script type="module" src="js/navigation.js"></script>
+</div>
+</body>
+</html>

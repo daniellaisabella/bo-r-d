@@ -1,22 +1,55 @@
 console.log("hej fra navigation")
 
-import { fetchSession } from './modulejson.js';
+import {fetchSession, baseurl} from './modulejson.js';
 
-let loginBtn = document.getElementById("loginBtn")
+document.addEventListener("DOMContentLoaded", async () => {
 
-checkSession()
 
-async function checkSession() {
+    // --- CHECK SESSION ---
+    await checkSession();
 
-    try {
-        let response = await fetchSession()
-        if (response != null){
-            console.log("Jeg aendrer login knap")
-            loginBtn.href = "myProfile.html"
-            loginBtn.textContent = "Min Profil"
-        }
-    } catch (error){
-        console.log("Error fetching session " + error)
+    // --- LOGOUT BUTTON ---
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', async function(e) {
+            e.preventDefault();
+
+            try {
+                const response = await fetch(baseurl + "logoutuser", {
+                    method: 'POST',
+                    credentials: 'include'
+                });
+
+                if (response.ok) {
+                    window.location.href = baseurl + "index.html";
+                } else {
+                    console.error('Logout fejlede');
+                }
+            } catch (err) {
+                console.error('Fejl ved logout:', err);
+            }
+        });
     }
 
+});
+
+
+// ------------ FUNCTIONS ------------
+async function checkSession() {
+    try {
+        let user = await fetchSession();
+        const loginBtn = document.getElementById("loginBtn");
+
+        if (loginBtn && user != null) {
+            loginBtn.textContent = "Min Profil";
+            loginBtn.href = user.role !== "ADMIN"
+                ? "myProfile.html"
+                : "adminProfile.html";
+            return user.role
+        }
+    } catch (error) {
+        console.log("Error fetching session " + error);
+    }
 }
+
+export {checkSession};
