@@ -79,6 +79,15 @@ public class BookingRestController {
                                 "\n\nLokation: " + booking.getLocation().toString() + "\nNoter: " + booking.getNotes().toString() +
                                 "\n\nVenlig hilsen \nBo&Råd"
                 );
+                mailService.sendEmail(
+                        "christoffersondergaard@gmail.com",
+                        "Ny booking",
+                        "Kære Bo,\n\n" + user.get().getName() + " har booket en aftale med Bo & Råd d. " + formattedDate +
+                                " kl. " + formattedStart +
+                                " - " + formattedEnd +
+                                "\n\nKundens email: " + user.get().getEmail() + "\nLokation: " + booking.getLocation().toString() + "\nNoter: " + booking.getNotes().toString() +
+                                "\n\nVenlig hilsen \nBo&Råd"
+                );
 
 
                 return ResponseEntity.ok(Map.of(
@@ -131,6 +140,51 @@ public class BookingRestController {
             booking.setNotes(notes);
 
             Booking updatedBooking = bookingService.updateBooking(booking);
+
+            // ===== SEND EMAIL TIL BRUGER OG ADMIN VED OPDATERING =====
+
+// Først hent brugeren
+            User bookingUser = booking.getUser();
+
+// Find dato og tid på slot
+            LocalDate date = updatedBooking.getSlot().getStartTime().toLocalDate();
+            LocalTime start = updatedBooking.getSlot().getStartTime().toLocalTime();
+            LocalTime end = start.plusMinutes(updatedBooking.getSlot().getDurationMinutes());
+
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("d. MMMM yyyy", new Locale("da", "DK"));
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+
+            String formattedDate = date.format(dateFormatter);
+            String formattedStart = start.format(timeFormatter);
+            String formattedEnd = end.format(timeFormatter);
+
+// Mail til bruger
+            mailService.sendEmail(
+                    bookingUser.getEmail(),
+                    "Ændring af booking",
+                    "Kære " + bookingUser.getName() + ", " +
+                            "\n\nDin booking hos Bo & Råd er blevet ændret." +
+                            "\nDato: " + formattedDate +
+                            "\nTid: " + formattedStart + " - " + formattedEnd +
+                            "\nLokation: " + updatedBooking.getLocation() +
+                            "\nNoter: " + updatedBooking.getNotes() +
+                            "\n\nVenlig hilsen \nBo&Råd"
+            );
+
+// Mail til admin
+            mailService.sendEmail(
+                    "christoffersondergaard1@gmail.com",
+                    "Booking ændret",
+                    "Kære Bo," +
+                            "\n\n" + bookingUser.getName() + " har ændret en booking." +
+                            "\nDato: " + formattedDate +
+                            "\nTid: " + formattedStart + " - " + formattedEnd +
+                            "\nEmail: " + bookingUser.getEmail() +
+                            "\nLokation: " + updatedBooking.getLocation() +
+                            "\nNoter: " + updatedBooking.getNotes() +
+                            "\n\nVenlig hilsen \nBo&Råd"
+            );
+
 
             return ResponseEntity.ok(updatedBooking);
 
