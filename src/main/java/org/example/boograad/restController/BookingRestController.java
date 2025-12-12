@@ -7,6 +7,7 @@ import org.example.boograad.model.Booking;
 import org.example.boograad.model.User;
 import org.example.boograad.service.AvailableSlotService;
 import org.example.boograad.service.BookingService;
+import org.example.boograad.service.MailService;
 import org.example.boograad.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,8 @@ public class BookingRestController {
     private UserService userService;
     @Autowired
     AvailableSlotService availableSlotService;
+    @Autowired
+    MailService mailService;
 
     DateTimeFormatter isoFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
@@ -54,6 +57,11 @@ public class BookingRestController {
 
                 // Forsøg at booke slot
                 Booking booking = bookingService.bookSlot(slotId, user.get(), location, notes);
+                mailService.sendEmail(
+                        "christoffersondergaard1@gmail.com",
+                        "Test Email",
+                        "Dette er en test mail sendt fra Spring Boot!, Din booking starter "
+                );
                 return ResponseEntity.ok(Map.of(
                         "message", "Booking successful",
                         "bookingId", booking.getBookingId()
