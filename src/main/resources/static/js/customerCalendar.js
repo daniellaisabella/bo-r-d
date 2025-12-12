@@ -1,4 +1,4 @@
-import { fetchAnyUrl, fetchSession } from './moduleJSON.js';
+import { fetchAnyUrl, fetchSession, deleteOldSlots } from './moduleJSON.js';
 
 document.addEventListener('DOMContentLoaded', async function () {
 
@@ -25,6 +25,9 @@ document.addEventListener('DOMContentLoaded', async function () {
     // HENT SESSION
     const session = await fetchSession();
     calendarEl.dataset.sessionRole = session.role;
+
+    // Delete old slots
+    await deleteOldSlots()
 
     // FULLCALENDAR
     const calendar = new FullCalendar.Calendar(calendarEl, {
