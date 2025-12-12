@@ -80,7 +80,7 @@ public class BookingRestController {
                                 "\n\nVenlig hilsen \nBo&Råd"
                 );
                 mailService.sendEmail(
-                        "christoffersondergaard@gmail.com",
+                        "christoffersondergaard1@gmail.com",
                         "Ny booking",
                         "Kære Bo,\n\n" + user.get().getName() + " har booket en aftale med Bo & Råd d. " + formattedDate +
                                 " kl. " + formattedStart +
