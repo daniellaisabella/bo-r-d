@@ -16,6 +16,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.ZoneId;
 
@@ -57,11 +59,28 @@ public class BookingRestController {
 
                 // Forsøg at booke slot
                 Booking booking = bookingService.bookSlot(slotId, user.get(), location, notes);
+                LocalDate date = booking.getSlot().getStartTime().toLocalDate();
+                LocalTime start = booking.getSlot().getStartTime().toLocalTime();
+                LocalTime end = start.plusMinutes(booking.getSlot().getDurationMinutes());
+
+                DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("d. MMMM yyyy", new Locale("da", "DK"));
+                DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+
+                String formattedDate = date.format(dateFormatter);
+                String formattedStart = start.format(timeFormatter);
+                String formattedEnd = end.format(timeFormatter);
+
                 mailService.sendEmail(
-                        "christoffersondergaard1@gmail.com",
-                        "Test Email",
-                        "Dette er en test mail sendt fra Spring Boot!, Din booking starter "
+                        user.get().getEmail(),
+                        "Booking bekræftelse",
+                        "Kære " + user.get().getName() + ", " + "\n\nDu har booket en aftale med Bo & Råd d. " + formattedDate +
+                                " kl. " + formattedStart +
+                                " - " + formattedEnd +
+                                "\n\nLokation: " + booking.getLocation().toString() + "\nNoter: " + booking.getNotes().toString() +
+                                "\n\nVenlig hilsen \nBo&Råd"
                 );
+
+
                 return ResponseEntity.ok(Map.of(
                         "message", "Booking successful",
                         "bookingId", booking.getBookingId()
@@ -101,7 +120,7 @@ public class BookingRestController {
             }
 
             // Check om booking tilhører den loggede bruger
-            if (session.getAttribute("role").equals("ADMIN")){
+            if (session.getAttribute("role").equals("ADMIN")) {
 
             } else if (booking.getUser().getUserId() != userId) {
                 return ResponseEntity.status(403).body(Map.of("message", "Du kan kun ændre dine egne bookings"));
