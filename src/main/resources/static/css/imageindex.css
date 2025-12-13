@@ -17,7 +17,7 @@ img {
 }
 
 .image-container img {
-    width: 60%;              /* Billedets bredde, kan justeres */
+    width: 40%;              /* Billedets bredde, kan justeres */
     max-width: 100%;         /* Sikrer at det ikke overskrider containeren */
     height: auto;
 }
