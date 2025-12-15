@@ -1,6 +1,6 @@
 import {fetchAnyUrl, fetchSession, deleteOldSlots} from "./moduleJSON.js";
 
-document.addEventListener("DOMContentLoaded", async function () {
+document.addEventListener("DOMContentLoaded", async function (node, offset) {
     const calendarEl = document.getElementById("calendar");
 
     const modal = document.getElementById("bookingModal");
@@ -38,6 +38,10 @@ document.addEventListener("DOMContentLoaded", async function () {
         initialView: "dayGridMonth",
         locale: "da",
         height: "auto",
+
+        buttonText: {
+            today: "I dag"
+        },
         eventClick(info) {
             const slot = info.event.extendedProps;
             selectedEvent = info.event;
@@ -126,6 +130,8 @@ document.addEventListener("DOMContentLoaded", async function () {
             let response;
             if (selectedEvent.extendedProps.isBooked) {
                 if (!location || !notes) return alert("Udfyld lokation og noter.");
+                document.getElementById("bookerP").textContent = "Opdaterer booking..."
+                document.getElementById("bookerP").style.display = "block"
                 response = await fetch("/booking", {
                     method: "PUT",
                     headers: {"Content-Type": "application/json"},
@@ -142,11 +148,15 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
             if (response.ok) {
+                document.getElementById("bookerP").style.display = "none"
                 alert("Opdatering gennemført!");
                 selectedEvent.setExtendedProp("location", location);
                 selectedEvent.setExtendedProp("notes", notes);
                 selectedEvent.setExtendedProp("duration", duration);
-                selectedEvent.setStart(new Date(`${date}T${time}:00`));
+                const newStart = new Date(`${date}T${time}:00`);
+                const newEnd = new Date(newStart.getTime() + duration * 60000);
+                selectedEvent.setDates(newStart, newEnd);
+
             } else {
                 const data = await response.json().catch(() => ({message: "Ukendt fejl"}));
                 alert("Kunne ikke opdatere: " + (data.message || data));

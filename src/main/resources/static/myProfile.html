@@ -21,6 +21,8 @@
         <label>Noter:</label>
         <textarea id="bookingNotes" rows="3"></textarea>
 
+        <p id="bookerP" style="display: none"></p>
+
         <button id="confirmBookingBtn">Book tid</button>
         <button id="updateBookingBtn">Opdater booking</button>
         <button id="deleteBookingBtn">Annuller booking</button>
@@ -39,17 +41,18 @@
         <!-- Navigation menu -->
         <nav class="nav-menu">
             <a href="products.html" class="nav-link">Boligrådgivning</a>
-            <a href="#kontakt" class="nav-link">Kontakt</a>
-            <a href="#om" class="nav-link">Om Bo & Råd</a>
+            <a href="index.html#kontakt" class="nav-link">Kontakt</a>
+            <a href="index.html#om" class="nav-link">Om Bo & Råd</a>
             <a  id="logoutBtn" class="nav-link">Log ud</a>
         </nav>
     </div>
 </header>
 
 <div class="page-container">
-    <h1>Min Profil</h1>
-
-    <h2>Kalender</h2>
+    <p>
+        I kaldeneren får du et overblik over ledige tider, som du kan booke dig ind på. Du kan samtidigt se dine
+        egne bookings.
+    </p>
 
     <!-- Kalenderen -->
     <div id="calendar"></div>
@@ -58,10 +61,12 @@
     <div class="image-container">
         <img src="images/Bo.png" alt="Beskrivelse af billede">
         <div class="side-box">
-            <h2>Velkommen til Bo & Råd</h2>
-            <p>Her på siden kan du finde information om mig, Bo Andersen, og de ydelser og services, jeg tilbyder som
-                selvstændig bygningskonstruktør. Jeg rådgiver inden for klimarådgivning, klimaplaner og boligrelaterede
-                projekter, så du kan få professionel vejledning til dit byggeri eller din bolig.</p>
+            <h2>Om mødet</h2>
+            <p>
+                I din booking udfylder du adresse og noter med dine spørgsmål, derved kan
+                jeg forberede mig til at hjælpe dig bedst muligt. Mødet foregår online og er en stille og rolig professionel snak, hvor
+                jeg kan være med til at løse og give dig svar på dine spørgsmål.
+            </p>
         </div>
     </div>
 

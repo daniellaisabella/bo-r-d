@@ -27,6 +27,10 @@ document.addEventListener("DOMContentLoaded", async function () {
         locale: "da",
         height: "auto",
 
+        buttonText: {
+            today: "I dag"
+        },
+
         eventClick(info) {
             const slot = info.event.extendedProps;
             selectedEvent = info.event;
@@ -82,6 +86,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         try {
             const slotId = selectedEvent.extendedProps.slotId;
+            document.getElementById("bookerP").textContent = "Booker tid..."
+            document.getElementById("bookerP").style.display = "block"
             const response = await fetch("/booking", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
@@ -89,6 +95,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             });
 
             if (response.ok) {
+                document.getElementById("bookerP").style.display = "none"
                 alert("Booking gennemført!");
                 selectedEvent.setProp("color", "blue");
                 selectedEvent.setProp("title", "Din booking");
@@ -119,6 +126,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         try {
             const slotId = selectedEvent.extendedProps.slotId;
+            document.getElementById("bookerP").textContent = "Opdaterer booking..."
+            document.getElementById("bookerP").style.display = "block"
 
             const response = await fetch("/booking", {
                 method: "PUT",
@@ -127,6 +136,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             });
 
             if (response.ok) {
+                document.getElementById("bookerP").style.display = "none"
                 alert("Opdateret!");
                 selectedEvent.setExtendedProp("location", location);
                 selectedEvent.setExtendedProp("notes", notes);
