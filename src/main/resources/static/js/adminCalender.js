@@ -13,14 +13,14 @@ document.addEventListener("DOMContentLoaded", async function (node, offset) {
     const notesInput = document.getElementById("bookingNotes");
     const bookingDate = document.getElementById("bookingDate");
     const bookingTime = document.getElementById("bookingTime");
-    const bookingDuration = document.getElementById("bookingDuration");
+    const bookingDuration = parseInt(document.querySelector('input[name="bookingDuration"]:checked').value);
     const adminUserInfo = document.getElementById("adminUserInfo");
 
     const createSlotModal = document.getElementById("createSlotModal");
     const closeSlotModal = document.getElementById("closeSlotModal");
     const dateSlot = document.getElementById("dateSlot");
     const timeSlot = document.getElementById("timeSlot");
-    const durationSlot = document.getElementById("durationSlot");
+    const durationSlot = parseInt(document.querySelector('input[name="duration"]:checked').value);
     const confirmSlotBtn = document.getElementById("confirmSlotBtn");
     const cancelSlotBtn = document.getElementById("cancelSlotBtn");
 
@@ -53,7 +53,10 @@ document.addEventListener("DOMContentLoaded", async function (node, offset) {
             notesInput.value = slot.notes || "";
             bookingDate.value = selectedEvent.start.toISOString().slice(0, 10);
             bookingTime.value = selectedEvent.start.toTimeString().slice(0, 5);
-            bookingDuration.value = slot.duration || 60;
+            const duration = slot.duration || 60;
+            document.querySelectorAll('input[name="bookingDuration"]').forEach(radio => {
+                radio.checked = parseInt(radio.value) === duration;
+            });
             adminUserInfo.textContent = slot.userName
                 ? `Bruger: ${slot.userName}\nEmail: ${slot.userEmail}\nTelefon: ${slot.userPhone || "Ikke angivet"}`
                 : "";
@@ -73,7 +76,6 @@ document.addEventListener("DOMContentLoaded", async function (node, offset) {
             }
             bookingDate.disabled = false;
             bookingTime.disabled = false;
-            bookingDuration.disabled = false;
         }
     });
 
@@ -101,7 +103,6 @@ document.addEventListener("DOMContentLoaded", async function (node, offset) {
         notesInput.value = "";
         bookingDate.value = "";
         bookingTime.value = "";
-        bookingDuration.value = "";
         adminUserInfo.textContent = "";
         deleteBtn.style.display = "none";
     };
@@ -120,7 +121,7 @@ document.addEventListener("DOMContentLoaded", async function (node, offset) {
         const notes = notesInput.value;
         const date = bookingDate.value;
         const time = bookingTime.value;
-        const duration = parseInt(bookingDuration.value);
+        const duration = parseInt(document.querySelector('input[name="bookingDuration"]:checked').value);
 
         if (!date || !time || !duration) return alert("Udfyld alle felter.");
 
@@ -262,7 +263,7 @@ document.addEventListener("DOMContentLoaded", async function (node, offset) {
     confirmSlotBtn.onclick = async () => {
         const date = dateSlot.value;
         const time = timeSlot.value;
-        const duration = parseInt(durationSlot.value);
+        const duration = parseInt(document.querySelector('input[name="duration"]:checked').value);
         if (!date || !time || !duration) return alert("Udfyld dato, tid og varighed.");
 
         const startTime = `${date}T${time}:00`;
@@ -294,7 +295,6 @@ document.addEventListener("DOMContentLoaded", async function (node, offset) {
                 createSlotModal.style.display = "none";
                 dateSlot.value = "";
                 timeSlot.value = "";
-                durationSlot.value = "";
             } else {
                 const txt = await response.text();
                 alert(txt);

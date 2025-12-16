@@ -16,23 +16,41 @@
         <span id="closeModal" style="float:right; cursor:pointer;">&times;</span>
 
         <!-- Dato og tid for admin -->
-        <label>Dato:</label>
+        <label for="bookingDate">Dato:</label>
         <input type="date" id="bookingDate">
+        <br>
 
-        <label>Start tid:</label>
+        <label for="bookingTime">Start tid:</label>
         <input type="time" id="bookingTime">
+        <br>
 
-        <label>Varighed (minutter):</label>
-        <input type="number" id="bookingDuration" min="1">
+        <div class="duration-options">
+            <label>
+                <input type="radio" name="bookingDuration" value="30" checked>
+                30 min – 500,-
+            </label>
+            <label>
+                <input type="radio" name="bookingDuration" value="45">
+                45 min – 750,-
+            </label>
+            <label>
+                <input type="radio" name="bookingDuration" value="60">
+                60 min – 1000,-
+            </label>
+        </div>
 
-        <label>Lokation:</label>
+        <label for="bookingLocation">Adresse:</label>
         <input type="text" id="bookingLocation">
+        <br>
 
-        <label>Noter:</label>
+        <label for="bookingNotes">Noter:</label>
         <textarea id="bookingNotes" rows="3"></textarea>
+        <br>
 
         <p id="adminUserInfo"></p>
+        <br>
         <p id="bookerP" style="display: none"></p>
+        <br>
 
         <button id="cancelBookingBtn">Luk</button>
         <button id="confirmBookingBtn" style="display:none;">Gem booking</button>
@@ -48,18 +66,32 @@
 
         <div id="SlotModalInfo" class="modal-header"></div>
 
-        <label>Dato:</label>
+        <label for="dateSlot">Dato:</label>
         <input type="date" id="dateSlot" required>
+        <br>
 
-        <label>Start tid:</label>
+        <label for="timeSlot">Start tid:</label>
         <input type="time" id="timeSlot" required>
+        <br>
 
-        <label>Varighed: (i minutter)</label>
-        <input type="number" id="durationSlot" required>
-
-
+        <div class="duration-options">
+            <label>
+                <input type="radio" name="duration" value="30" checked>
+                30 min – 500,-
+            </label>
+            <label>
+                <input type="radio" name="duration" value="45">
+                45 min – 750,-
+            </label>
+            <label>
+                <input type="radio" name="duration" value="60">
+                60 min – 1000,-
+            </label>
+        </div>
+        <br>
 
         <p id="adminUserSlotInfo"></p>
+        <br>
 
         <button id="cancelSlotBtn">Luk</button>
         <button id="confirmSlotBtn" class="confirm-btn">Opret tid</button>

@@ -14,14 +14,18 @@
     <div class="modal-content">
         <span id="closeModal" style="float:right; cursor:pointer;">&times;</span> <!-- SKAL FINNES -->
         <div id="modalInfo" class="modal-header"></div>
+        <br>
 
-        <label>Lokation:</label>
+        <label for="bookingLocation">Adresse:</label>
         <input type="text" id="bookingLocation">
-
-        <label>Noter:</label>
+        <br>
+        <br>
+        <label for="bookingNotes">Noter: (En lille beskrivelse af dit problem/spørgsmål)</label>
         <textarea id="bookingNotes" rows="3"></textarea>
+        <br>
 
         <p id="bookerP" style="display: none"></p>
+        <br>
 
         <button id="confirmBookingBtn">Book tid</button>
         <button id="updateBookingBtn">Opdater booking</button>
