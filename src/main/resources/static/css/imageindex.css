@@ -24,8 +24,7 @@ img {
 }
 
 .side-box {
-    width: 35%;              /* Boksens bredde */
-
+   flex: 1;
     padding: 40px;
     border-radius: 8px;
 
