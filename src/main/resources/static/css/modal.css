@@ -66,7 +66,7 @@
 
     font-size: 20px;
     font-weight: 400;
-    color: #777;
+    color: #666;
 
     background: none;
     border: none;
@@ -128,7 +128,7 @@
     margin: 0;
     width: 16px;
     height: 16px;
-    accent-color: #4CAF50;
+    accent-color: #3F8F6B;
     flex-shrink: 0;
 }
 
@@ -164,44 +164,49 @@
 }
 
 /* =========================================================
-   KNAP FARVER
+   ROLIGE KNAPFARVER – BO & RÅD
    ========================================================= */
+
+/* Bekræft / Opret */
 #confirmBookingBtn,
 #confirmSlotBtn {
-    background-color: #4CAF50;
+    background-color: #3F8F6B;
     color: #fff;
 }
 
 #confirmBookingBtn:hover,
 #confirmSlotBtn:hover {
-    background-color: #43a047;
+    background-color: #357B5C;
 }
 
+/* Opdater */
 #updateBookingBtn {
-    background-color: #2196F3;
+    background-color: #3A6EA5;
     color: #fff;
 }
 
 #updateBookingBtn:hover {
-    background-color: #1e88e5;
+    background-color: #315F8F;
 }
 
+/* Slet */
 #deleteBookingBtn {
-    background-color: #f44336;
+    background-color: #B55A5A;
     color: #fff;
 }
 
 #deleteBookingBtn:hover {
-    background-color: #e53935;
+    background-color: #9E4B4B;
 }
 
+/* Annuller */
 #cancelBookingBtn,
 #cancelSlotBtn {
-    background-color: #f0f0f0;
-    color: #222;
+    background-color: #F4F6F5;
+    color: #1A1A1A;
 }
 
 #cancelBookingBtn:hover,
 #cancelSlotBtn:hover {
-    background-color: #e0e0e0;
+    background-color: #E6EBE8;
 }
