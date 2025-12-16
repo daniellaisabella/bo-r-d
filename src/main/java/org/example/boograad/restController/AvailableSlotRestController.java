@@ -8,6 +8,7 @@ import org.example.boograad.model.Role;
 import org.example.boograad.model.User;
 import org.example.boograad.service.AvailableSlotService;
 import org.example.boograad.service.BookingService;
+import org.example.boograad.service.MailService;
 import org.example.boograad.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +16,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @RestController
@@ -28,6 +32,8 @@ public class AvailableSlotRestController {
     BookingService bookingService;
     @Autowired
     AvailableSlotService availableSlotService;
+    @Autowired
+    MailService mailService;
 
     @GetMapping("/availableslots")
     public ResponseEntity<?> getAvailableSlots() {
@@ -94,14 +100,13 @@ public class AvailableSlotRestController {
 
             AvailableSlot slot = slotOpt.get();
 
-            if (slot.getIsBooked() || slot.getBooking()!=null){
+            if (slot.getIsBooked() || slot.getBooking() != null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body("Slot er booked.");
             }
 
             // Slet slot
             availableSlotService.deleteSlot(slotId);
-
 
 
             return ResponseEntity.ok("Slot slettet.");
@@ -119,8 +124,8 @@ public class AvailableSlotRestController {
         try {
             List<AvailableSlot> allSlots = availableSlotService.getAvailableSlots();
 
-            for (AvailableSlot availableSlot : allSlots){
-                if(availableSlot.getStartTime().isBefore(LocalDateTime.now())){
+            for (AvailableSlot availableSlot : allSlots) {
+                if (availableSlot.getStartTime().isBefore(LocalDateTime.now())) {
                     availableSlotService.deleteSlot(availableSlot.getSlotId());
                 }
             }
@@ -136,9 +141,14 @@ public class AvailableSlotRestController {
     @PutMapping("/updateslot")
     public ResponseEntity<?> updateSlot(@RequestBody Map<String, String> request) {
         try {
+            // --- Hent værdier fra request --- //
             int slotId = Integer.parseInt(request.get("slotId"));
-            Optional<AvailableSlot> slotOpt = availableSlotService.findById(slotId);
+            String startTimeStr = request.get("startTime");
+            int durationMinutes = Integer.parseInt(request.get("durationMinutes"));
+            String location = request.get("location");
+            String notes = request.get("notes");
 
+            Optional<AvailableSlot> slotOpt = availableSlotService.findById(slotId);
             if (slotOpt.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body("Slot findes ikke.");
@@ -146,17 +156,17 @@ public class AvailableSlotRestController {
 
             AvailableSlot slot = slotOpt.get();
 
-            // --- Hent nye værdier fra request --- //
-            LocalDateTime newStart = LocalDateTime.parse(request.get("startTime"));
-            int newDuration = Integer.parseInt(request.get("durationMinutes"));
-            String newLocation = request.get("location");
-            String newNotes = request.get("notes");
-            LocalDateTime newEnd = newStart.plusMinutes(newDuration);
+            // --- Parse startTime (samme stabilitet som din booking-løsning) --- //
+            LocalDateTime newStart =
+                    LocalDateTime.parse(startTimeStr, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+
+            LocalDateTime newEnd = newStart.plusMinutes(durationMinutes);
 
             // --- Tjek overlap med andre slots --- //
             List<AvailableSlot> allSlots = availableSlotService.getAvailableSlots();
             for (AvailableSlot other : allSlots) {
-                if (other.getSlotId() == slotId) continue; // ignorer sig selv
+                if (other.getSlotId() == slotId) continue;
+
                 LocalDateTime otherStart = other.getStartTime();
                 LocalDateTime otherEnd = otherStart.plusMinutes(other.getDurationMinutes());
 
@@ -166,19 +176,66 @@ public class AvailableSlotRestController {
                 }
             }
 
-            // --- Opdater ledigt slot --- //
+            // --- Opdater slot --- //
             slot.setStartTime(newStart);
-            slot.setDurationMinutes(newDuration);
+            slot.setDurationMinutes(durationMinutes);
 
-            // --- Hvis der er en booking, opdater bookingens location og notes --- //
+            // --- Hvis der findes en booking, opdater den også --- //
             Booking booking = slot.getBooking();
             if (booking != null) {
-                booking.setLocation(newLocation);
-                booking.setNotes(newNotes);
+                booking.setLocation(location);
+                booking.setNotes(notes);
                 bookingService.saveBooking(booking);
             }
 
             availableSlotService.saveSlot(slot);
+
+            // ===== SEND EMAIL HVIS SLOT ER BOOKET ===== //
+            if (booking != null) {
+
+                User bookingUser = booking.getUser();
+
+                // Samme datologik som i din WORKING booking-metode
+                LocalDate date = slot.getStartTime().toLocalDate();
+                LocalTime start = slot.getStartTime().toLocalTime();
+                LocalTime end = start.plusMinutes(slot.getDurationMinutes());
+
+                DateTimeFormatter dateFormatter =
+                        DateTimeFormatter.ofPattern("d. MMMM yyyy", new Locale("da", "DK"));
+                DateTimeFormatter timeFormatter =
+                        DateTimeFormatter.ofPattern("HH:mm");
+
+                String formattedDate = date.format(dateFormatter);
+                String formattedStart = start.format(timeFormatter);
+                String formattedEnd = end.format(timeFormatter);
+
+                // Mail til bruger
+                mailService.sendEmail(
+                        bookingUser.getEmail(),
+                        "Ændring af booking",
+                        "Kære " + bookingUser.getName() + ", " +
+                                "\n\nDin booking hos Bo & Råd er blevet ændret." +
+                                "\nDato: " + formattedDate +
+                                "\nTid: " + formattedStart + " - " + formattedEnd +
+                                "\nLokation: " + booking.getLocation() +
+                                "\nNoter: " + booking.getNotes() +
+                                "\n\nVenlig hilsen \nBo&Råd"
+                );
+
+                // Mail til admin
+                mailService.sendEmail(
+                        "christoffersondergaard1@gmail.com",
+                        "Booking ændret",
+                        "Kære Bo," +
+                                "\n\n" + bookingUser.getName() + "'s booking er blevet ændret." +
+                                "\nDato: " + formattedDate +
+                                "\nTid: " + formattedStart + " - " + formattedEnd +
+                                "\nEmail: " + bookingUser.getEmail() +
+                                "\nLokation: " + booking.getLocation() +
+                                "\nNoter: " + booking.getNotes() +
+                                "\n\nVenlig hilsen \nBo&Råd"
+                );
+            }
 
             return ResponseEntity.ok(slot);
 
@@ -188,6 +245,7 @@ public class AvailableSlotRestController {
                     .body("Fejl ved opdatering af slot: " + e.getMessage());
         }
     }
+
 
 
 }

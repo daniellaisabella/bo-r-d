@@ -133,13 +133,10 @@ document.addEventListener("DOMContentLoaded", async function (node, offset) {
                 if (!location || !notes) return alert("Udfyld lokation og noter.");
                 document.getElementById("bookerP").textContent = "Opdaterer booking..."
                 document.getElementById("bookerP").style.display = "block"
-                response = await fetch("/booking", {
-                    method: "PUT",
-                    headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify({slotId, location, notes})
-                });
+            } else {
+                document.getElementById("bookerP").textContent = "Opdaterer tid..."
+                document.getElementById("bookerP").style.display = "block"
             }
-
             const startTime = `${date}T${time}:00`;
             response = await fetch("/updateslot", {
                 method: "PUT",

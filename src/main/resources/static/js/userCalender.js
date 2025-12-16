@@ -49,7 +49,9 @@ document.addEventListener("DOMContentLoaded", async function () {
             notesInput.value = slot.notes || "";
 
             if (slot.isBooked && slot.bookedByMe) {
-                modalInfo.textContent = `Din booking – ${selectedEvent.start.toLocaleString()}` + ` \nVarighed: ${selectedEvent.duration}`;
+                modalInfo.textContent =
+                    `Din booking – ${selectedEvent.start.toLocaleString()}` +
+                    `\nVarighed: ${selectedEvent.extendedProps.duration} minutter`;
                 updateBtn.style.display = "inline-block";
                 deleteBtn.style.display = "inline-block";
 
@@ -60,7 +62,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             } else {
                 modalInfo.textContent =
-                    `Vil du booke denne tid? - \n${selectedEvent.start.toLocaleString()}`;
+                    `Vil du booke denne tid? – ${selectedEvent.start.toLocaleString()}` +
+                    `\nVarighed: ${selectedEvent.extendedProps.duration} minutter`;
                 confirmBtn.style.display = "inline-block";
             }
         }
