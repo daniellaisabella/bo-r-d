@@ -14,18 +14,37 @@ img {
     gap: 20px;               /* Luft mellem billede og boks */
     margin-left: 0;
     margin-bottom: 20px;     /* Luft under containeren */
+
 }
 
 .image-container img {
-    width: 60%;              /* Billedets bredde, kan justeres */
+    width: 40%;              /* Billedets bredde, kan justeres */
     max-width: 100%;         /* Sikrer at det ikke overskrider containeren */
     height: auto;
 }
 
 .side-box {
-    width: 35%;              /* Boksens bredde */
-
+   flex: 1;
     padding: 40px;
     border-radius: 8px;
 
+}
+.profile-card {
+    display: inline-block;   /* Container kun så bred som billedet */
+    text-align: center;      /* Centrerer teksten under billedet */
+}
+
+.profile-card .portrait-small {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;       /* Fylder cirklen pænt */
+    border-radius: 50%;      /* Gør billedet rundt */
+    display: block;
+    margin: 0 auto;          /* Centrerer billedet i containeren */
+}
+
+.profile-card h2 {
+    margin-top: 10px;        /* Luft mellem billede og tekst */
+    font-size: 1.5rem;       /* Bevarer h2-stilen */
+    text-align: center;      /* Teksten centreres under billedet */
 }

@@ -27,6 +27,10 @@ document.addEventListener("DOMContentLoaded", async function () {
         locale: "da",
         height: "auto",
 
+        buttonText: {
+            today: "I dag"
+        },
+
         eventClick(info) {
             const slot = info.event.extendedProps;
             selectedEvent = info.event;
@@ -45,7 +49,9 @@ document.addEventListener("DOMContentLoaded", async function () {
             notesInput.value = slot.notes || "";
 
             if (slot.isBooked && slot.bookedByMe) {
-                modalInfo.textContent = `Din booking – ${selectedEvent.start.toLocaleString()}`;
+                modalInfo.textContent =
+                    `Din booking – ${selectedEvent.start.toLocaleString()}` +
+                    `\nVarighed: ${selectedEvent.extendedProps.duration} minutter`;
                 updateBtn.style.display = "inline-block";
                 deleteBtn.style.display = "inline-block";
 
@@ -56,7 +62,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             } else {
                 modalInfo.textContent =
-                    `Vil du booke denne tid?\n${selectedEvent.start.toLocaleString()}`;
+                    `Vil du booke denne tid? – ${selectedEvent.start.toLocaleString()}` +
+                    `\nVarighed: ${selectedEvent.extendedProps.duration} minutter`;
                 confirmBtn.style.display = "inline-block";
             }
         }
@@ -82,6 +89,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         try {
             const slotId = selectedEvent.extendedProps.slotId;
+            document.getElementById("bookerP").textContent = "Booker tid..."
+            document.getElementById("bookerP").style.display = "block"
             const response = await fetch("/booking", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
@@ -89,6 +98,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             });
 
             if (response.ok) {
+                document.getElementById("bookerP").style.display = "none"
                 alert("Booking gennemført!");
                 selectedEvent.setProp("color", "blue");
                 selectedEvent.setProp("title", "Din booking");
@@ -119,6 +129,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         try {
             const slotId = selectedEvent.extendedProps.slotId;
+            document.getElementById("bookerP").textContent = "Opdaterer booking..."
+            document.getElementById("bookerP").style.display = "block"
 
             const response = await fetch("/booking", {
                 method: "PUT",
@@ -127,6 +139,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             });
 
             if (response.ok) {
+                document.getElementById("bookerP").style.display = "none"
                 alert("Opdateret!");
                 selectedEvent.setExtendedProp("location", location);
                 selectedEvent.setExtendedProp("notes", notes);

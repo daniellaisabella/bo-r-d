@@ -1,6 +1,6 @@
 import {fetchAnyUrl, fetchSession, deleteOldSlots} from "./moduleJSON.js";
 
-document.addEventListener("DOMContentLoaded", async function () {
+document.addEventListener("DOMContentLoaded", async function (node, offset) {
     const calendarEl = document.getElementById("calendar");
 
     const modal = document.getElementById("bookingModal");
@@ -13,14 +13,14 @@ document.addEventListener("DOMContentLoaded", async function () {
     const notesInput = document.getElementById("bookingNotes");
     const bookingDate = document.getElementById("bookingDate");
     const bookingTime = document.getElementById("bookingTime");
-    const bookingDuration = document.getElementById("bookingDuration");
+    const bookingDuration = parseInt(document.querySelector('input[name="bookingDuration"]:checked').value);
     const adminUserInfo = document.getElementById("adminUserInfo");
 
     const createSlotModal = document.getElementById("createSlotModal");
     const closeSlotModal = document.getElementById("closeSlotModal");
     const dateSlot = document.getElementById("dateSlot");
     const timeSlot = document.getElementById("timeSlot");
-    const durationSlot = document.getElementById("durationSlot");
+    const durationSlot = parseInt(document.querySelector('input[name="duration"]:checked').value);
     const confirmSlotBtn = document.getElementById("confirmSlotBtn");
     const cancelSlotBtn = document.getElementById("cancelSlotBtn");
 
@@ -38,6 +38,10 @@ document.addEventListener("DOMContentLoaded", async function () {
         initialView: "dayGridMonth",
         locale: "da",
         height: "auto",
+
+        buttonText: {
+            today: "I dag"
+        },
         eventClick(info) {
             const slot = info.event.extendedProps;
             selectedEvent = info.event;
@@ -49,7 +53,10 @@ document.addEventListener("DOMContentLoaded", async function () {
             notesInput.value = slot.notes || "";
             bookingDate.value = selectedEvent.start.toISOString().slice(0, 10);
             bookingTime.value = selectedEvent.start.toTimeString().slice(0, 5);
-            bookingDuration.value = slot.duration || 60;
+            const duration = slot.duration || 60;
+            document.querySelectorAll('input[name="bookingDuration"]').forEach(radio => {
+                radio.checked = parseInt(radio.value) === duration;
+            });
             adminUserInfo.textContent = slot.userName
                 ? `Bruger: ${slot.userName}\nEmail: ${slot.userEmail}\nTelefon: ${slot.userPhone || "Ikke angivet"}`
                 : "";
@@ -69,7 +76,6 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
             bookingDate.disabled = false;
             bookingTime.disabled = false;
-            bookingDuration.disabled = false;
         }
     });
 
@@ -97,7 +103,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         notesInput.value = "";
         bookingDate.value = "";
         bookingTime.value = "";
-        bookingDuration.value = "";
         adminUserInfo.textContent = "";
         deleteBtn.style.display = "none";
     };
@@ -116,7 +121,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         const notes = notesInput.value;
         const date = bookingDate.value;
         const time = bookingTime.value;
-        const duration = parseInt(bookingDuration.value);
+        const duration = parseInt(document.querySelector('input[name="bookingDuration"]:checked').value);
 
         if (!date || !time || !duration) return alert("Udfyld alle felter.");
 
@@ -126,13 +131,12 @@ document.addEventListener("DOMContentLoaded", async function () {
             let response;
             if (selectedEvent.extendedProps.isBooked) {
                 if (!location || !notes) return alert("Udfyld lokation og noter.");
-                response = await fetch("/booking", {
-                    method: "PUT",
-                    headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify({slotId, location, notes})
-                });
+                document.getElementById("bookerP").textContent = "Opdaterer booking..."
+                document.getElementById("bookerP").style.display = "block"
+            } else {
+                document.getElementById("bookerP").textContent = "Opdaterer tid..."
+                document.getElementById("bookerP").style.display = "block"
             }
-
             const startTime = `${date}T${time}:00`;
             response = await fetch("/updateslot", {
                 method: "PUT",
@@ -142,11 +146,15 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
             if (response.ok) {
+                document.getElementById("bookerP").style.display = "none"
                 alert("Opdatering gennemført!");
                 selectedEvent.setExtendedProp("location", location);
                 selectedEvent.setExtendedProp("notes", notes);
                 selectedEvent.setExtendedProp("duration", duration);
-                selectedEvent.setStart(new Date(`${date}T${time}:00`));
+                const newStart = new Date(`${date}T${time}:00`);
+                const newEnd = new Date(newStart.getTime() + duration * 60000);
+                selectedEvent.setDates(newStart, newEnd);
+
             } else {
                 const data = await response.json().catch(() => ({message: "Ukendt fejl"}));
                 alert("Kunne ikke opdatere: " + (data.message || data));
@@ -252,7 +260,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     confirmSlotBtn.onclick = async () => {
         const date = dateSlot.value;
         const time = timeSlot.value;
-        const duration = parseInt(durationSlot.value);
+        const duration = parseInt(document.querySelector('input[name="duration"]:checked').value);
         if (!date || !time || !duration) return alert("Udfyld dato, tid og varighed.");
 
         const startTime = `${date}T${time}:00`;
@@ -284,7 +292,6 @@ document.addEventListener("DOMContentLoaded", async function () {
                 createSlotModal.style.display = "none";
                 dateSlot.value = "";
                 timeSlot.value = "";
-                durationSlot.value = "";
             } else {
                 const txt = await response.text();
                 alert(txt);
