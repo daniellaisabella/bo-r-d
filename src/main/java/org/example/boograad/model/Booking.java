@@ -26,6 +26,16 @@ public class Booking {
     private String location;
     private String notes;
 
+    @Column(nullable = false)
+    private boolean reminderSent = false;
+
+    public boolean isReminderSent() {
+        return reminderSent;
+    }
+
+    public void setReminderSent(boolean reminderSent) {
+        this.reminderSent = reminderSent;
+    }
     // JPA kræver en no-args constructor
   //  protected Booking() {}
 
