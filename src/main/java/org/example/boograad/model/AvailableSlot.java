@@ -63,5 +63,4 @@ public class AvailableSlot {
         this.booking = booking;
     }
 
-
 }
