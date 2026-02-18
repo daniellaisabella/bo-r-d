@@ -52,3 +52,5 @@ jobs:
           package: '*.jar'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8E74953BDC974C2DA2D1BD5ED2CCD02F }}
 
+
+
